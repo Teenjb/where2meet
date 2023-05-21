@@ -51,7 +51,6 @@ jobs:
                   gcloud builds submit -t gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA
             # Deploy image to Cloud Run
             - name: Deploy
-              dir: Backend/
               run: |
                   gcloud run deploy $SERVICE_NAME \
                     --region $RUN_REGION \
