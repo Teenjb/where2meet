@@ -5,8 +5,9 @@ const cors = require("cors");
 const app = express();
 require("dotenv").config();
 const sequelize = require("./src/configs/db.config.js");
-const User = require("./src/models/m_user.js");
 const authRouter = require("./src/routes/auth.route.js");
+const { logger, initLogCorrelation } = require("./src/utils/logging");
+const { fetchProjectId } = require("./src/utils/metadata");
 
 const corsOptions = {
   origin: "*",
@@ -14,9 +15,24 @@ const corsOptions = {
   optionsSuccessStatus: 200,
 };
 
+async function logging() {
+  let project = process.env.GOOGLE_CLOUD_PROJECT;
+  if (!project) {
+    try {
+      project = await fetchProjectId();
+    } catch (err) {
+      logger.warn("Could not fetch Project Id for tracing.");
+    }
+  }
+  // Initialize request-based logger with project Id
+  initLogCorrelation(project);
+}
+
+logging();
+
 sequelize.sync().then(() => {
-    console.log("synced");
-    });
+  console.log("synced");
+});
 
 app.use(cors(corsOptions));
 app.use(bodyParser.json());

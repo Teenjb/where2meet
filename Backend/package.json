@@ -18,6 +18,10 @@
     "jsonwebtoken": "^9.0.0",
     "nodemon": "^2.0.22",
     "pg": "^8.11.0",
-    "sequelize": "^6.31.1"
+    "sequelize": "^6.31.1",
+    "gcp-metadata": "^5.0.0",
+    "google-auth-library": "^8.0.0",
+    "pino": "^8.0.0",
+    "pino-http": "^8.0.0"
   }
 }
