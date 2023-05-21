@@ -32,7 +32,6 @@ jobs:
 
         steps:
             - name: Checkout
-              dir: Backend/
               uses: actions/checkout@v1
 
             # Setup gcloud CLI
