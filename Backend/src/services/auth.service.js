@@ -59,7 +59,7 @@ async function register(req, res) {
 }
 
 async function details(req, res) {
-  const { id } = req.user;
+  const id = req.user;
   const user = await m_user.findOne({
     where: {
       id: id,
