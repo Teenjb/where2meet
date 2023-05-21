@@ -54,6 +54,35 @@ jobs:
             - name: gcloud Set up
               run: |
                   gcloud config set project $PROJECT_ID
+
+            - name: Create and populate .env file
+              env:
+                JWT_SECRET: ${{ env.JWT_SECRET }}
+                PG_DATABASE: ${{ env.PG_DATABASE }}
+                PG_HOST: ${{ env.PG_HOST }}
+                PG_PASSWORD: ${{ env.PG_PASSWORD }}
+                PG_PORT: ${{ env.PG_PORT }}
+                PG_USER: ${{ env.PG_USER }}
+              run: |
+                touch .env
+
+                echo JWT_SECRET="$JWT_SECRET" >> .env
+                echo PG_DATABASE="$PG_DATABASE" >> .env
+                echo PG_HOST="$PG_HOST" >> .env
+                echo PG_PASSWORD="$PG_PASSWORD" >> .env
+                echo PG_PORT="$PG_PORT" >> .env
+                echo PG_USER="$PG_USER" >> .env
+
+                echo "cat .env"
+                cat .env
+
+                echo "ls -a ."
+                ls -a .
+
+                echo "ls -a ${{ github.workspace }}"
+                ls -a ${{ github.workspace }}
+              shell: bash
+
             # Build and push image to Google Container Registry
             - name: Build
               run: |
