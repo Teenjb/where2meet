@@ -40,6 +40,9 @@ jobs:
                   version: '275.0.0'
                   service_account_email: ${{ secrets.SA_EMAIL }}
                   service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+            - run: |
+                  sudo apt-get install python2.7
+                  export CLOUDSDK_PYTHON="/usr/bin/python2"
 
             # Configure gcloud CLI
             - name: gcloud Set up
