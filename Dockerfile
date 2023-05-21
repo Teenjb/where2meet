@@ -1,6 +1,6 @@
 FROM node:alpine
 WORKDIR /usr/app/src
-COPY package*.json ./
+COPY Backend/package*.json ./
 RUN npm install
-COPY src .
+COPY Backend/src .
 CMD ["node", "index.js"]
