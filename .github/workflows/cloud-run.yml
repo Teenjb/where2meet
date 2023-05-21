@@ -44,12 +44,10 @@ jobs:
 
             # Configure gcloud CLI
             - name: gcloud Set up
-              dir: Backend/
               run: |
                   gcloud config set project $PROJECT_ID
             # Build and push image to Google Container Registry
             - name: Build
-              dir: Backend/
               run: |
                   gcloud builds submit -t gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA
             # Deploy image to Cloud Run
