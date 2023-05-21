@@ -3,7 +3,7 @@ const { checkRegex, hashPassword, comparePassword } = require("../utils/auth.uti
 const jwt = require("jsonwebtoken");
 
 async function login(req, res) {
-  const { username, password } = req.body;
+  const { username, password } = req.query;
   // Check if username and password are valid
   try {
     await checkRegex(username, null, password, "login");
@@ -59,7 +59,7 @@ async function register(req, res) {
 }
 
 async function details(req, res) {
-  const id = req.user;
+  const { id } = req.user;
   const user = await m_user.findOne({
     where: {
       id: id,
