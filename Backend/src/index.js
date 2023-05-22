@@ -13,7 +13,7 @@ const corsOptions = {
   optionsSuccessStatus: 200,
 };
 
-sequelize.sync().then(() => {
+sequelize.sync({}).then(() => {
   console.log("synced");
 });
 

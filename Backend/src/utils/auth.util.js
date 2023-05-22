@@ -17,9 +17,9 @@ async function checkRegex(username, email, password, type) {
   }
   // Uncomment this to check for errors in deployment
   // If any errors occurred, throw an error with the error messages
-  // if (errors.length > 0) {
-  //   throw new Error(errors.join(", "));
-  // }
+  if (errors.length > 0) {
+    throw new Error(errors.join(", "));
+  }
 }
 
 async function hashPassword(password) {
