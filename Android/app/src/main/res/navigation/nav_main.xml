@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_main">
+    <fragment
+        android:id="@+id/onboarding"
+        android:name="com.where2meet.ui.screen.onboarding.OnboardingFragment"
+        android:label="Onboarding"
+        tools:layout="@layout/fragment_onboarding">
+        <action
+            android:id="@+id/action_to_login"
+            app:destination="@id/login" />
+        <action
+            android:id="@+id/action_to_register"
+            app:destination="@id/register" />
+    </fragment>
+    <fragment
+        android:id="@+id/login"
+        android:name="com.where2meet.ui.screen.auth.login.LoginFragment"
+        android:label="Login"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_to_register"
+            app:destination="@id/register" />
+        <action
+            android:id="@+id/action_to_home"
+            app:destination="@id/home" />
+    </fragment>
+    <fragment
+        android:id="@+id/register"
+        android:name="com.where2meet.ui.screen.auth.register.RegisterFragment"
+        android:label="Register"
+        tools:layout="@layout/fragment_register">
+        <action
+            android:id="@+id/action_to_login"
+            app:destination="@id/login"
+            app:popUpTo="@id/onboarding" />
+    </fragment>
+    <fragment
+        android:id="@+id/home"
+        android:name="com.where2meet.ui.screen.home.HomeFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_to_onboarding"
+            app:destination="@id/onboarding"
+            app:popUpTo="@id/nav_main"
+            app:popUpToInclusive="true" />
+    </fragment>
+</navigation>

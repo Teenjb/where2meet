@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="TextAppearance.W2M.DisplayLarge" parent="TextAppearance.Material3.DisplayLarge">
+        <item name="fontFamily">@font/grandstander</item>
+    </style>
+
+    <style name="TextAppearance.W2M.DisplayMedium" parent="TextAppearance.Material3.DisplayMedium">
+        <item name="fontFamily">@font/grandstander_bold</item>
+    </style>
+
+    <style name="TextAppearance.W2M.DisplaySmall" parent="TextAppearance.Material3.DisplaySmall">
+        <item name="fontFamily">@font/grandstander_bold</item>
+    </style>
+
+    <style name="TextAppearance.W2M.HeadlineLarge" parent="TextAppearance.Material3.HeadlineLarge">
+        <item name="fontFamily">@font/grandstander</item>
+    </style>
+
+    <style name="TextAppearance.W2M.HeadlineMedium" parent="TextAppearance.Material3.HeadlineMedium">
+        <item name="fontFamily">@font/grandstander_bold</item>
+    </style>
+
+    <style name="TextAppearance.W2M.HeadlineSmall" parent="TextAppearance.Material3.HeadlineSmall">
+        <item name="fontFamily">@font/grandstander_bold</item>
+    </style>
+
+    <style name="TextAppearance.W2M.TitleLarge" parent="TextAppearance.Material3.TitleLarge">
+        <item name="fontFamily">@font/nunito</item>
+    </style>
+
+    <style name="TextAppearance.W2M.TitleMedium" parent="TextAppearance.Material3.TitleMedium">
+        <item name="fontFamily">@font/nunito</item>
+    </style>
+
+    <style name="TextAppearance.W2M.TitleSmall" parent="TextAppearance.Material3.TitleSmall">
+        <item name="fontFamily">@font/nunito</item>
+    </style>
+
+    <style name="TextAppearance.W2M.BodyLarge" parent="TextAppearance.Material3.BodyLarge">
+        <item name="fontFamily">@font/nunito</item>
+    </style>
+
+    <style name="TextAppearance.W2M.BodyMedium" parent="TextAppearance.Material3.BodyMedium">
+        <item name="fontFamily">@font/nunito</item>
+    </style>
+
+    <style name="TextAppearance.W2M.BodySmall" parent="TextAppearance.Material3.BodySmall">
+        <item name="fontFamily">@font/nunito</item>
+    </style>
+
+    <style name="TextAppearance.W2M.LabelLarge" parent="TextAppearance.Material3.LabelLarge">
+        <item name="fontFamily">@font/nunito</item>
+    </style>
+
+    <style name="TextAppearance.W2M.LabelMedium" parent="TextAppearance.Material3.LabelMedium">
+        <item name="fontFamily">@font/nunito</item>
+    </style>
+
+    <style name="TextAppearance.W2M.LabelSmall" parent="TextAppearance.Material3.LabelSmall">
+        <item name="fontFamily">@font/nunito</item>
+    </style>
+</resources>

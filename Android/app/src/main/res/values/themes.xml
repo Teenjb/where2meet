@@ -1,6 +1,6 @@
 <resources>
 
-    <style name="Base.Theme.Where2Meet" parent="Theme.Material3.Light.NoActionBar">
+    <style name="Base.Theme.W2M" parent="Theme.Material3.Light.NoActionBar">
         <item name="colorPrimary">@color/md_theme_light_primary</item>
         <item name="colorOnPrimary">@color/md_theme_light_onPrimary</item>
         <item name="colorPrimaryContainer">@color/md_theme_light_primaryContainer</item>
@@ -29,5 +29,33 @@
         <item name="colorPrimaryInverse">@color/md_theme_light_inversePrimary</item>
     </style>
 
-    <style name="Theme.Where2Meet" parent="Base.Theme.Where2Meet" />
+    <style name="Theme.W2M" parent="Base.Theme.W2M">
+        // shapes
+        <item name="shapeAppearanceSmallComponent">
+            @style/ShapeAppearance.W2M.SmallComponent
+        </item>
+        <item name="shapeAppearanceMediumComponent">
+            @style/ShapeAppearance.W2M.MediumComponent
+        </item>
+        <item name="shapeAppearanceLargeComponent">
+            @style/ShapeAppearance.W2M.LargeComponent
+        </item>
+
+        // typography
+        <item name="textAppearanceDisplayLarge">@style/TextAppearance.W2M.DisplayLarge</item>
+        <item name="textAppearanceDisplayMedium">@style/TextAppearance.W2M.DisplayMedium</item>
+        <item name="textAppearanceDisplaySmall">@style/TextAppearance.W2M.DisplaySmall</item>
+        <item name="textAppearanceHeadlineLarge">@style/TextAppearance.W2M.HeadlineLarge</item>
+        <item name="textAppearanceHeadlineMedium">@style/TextAppearance.W2M.HeadlineMedium</item>
+        <item name="textAppearanceHeadlineSmall">@style/TextAppearance.W2M.HeadlineSmall</item>
+        <item name="textAppearanceTitleLarge">@style/TextAppearance.W2M.TitleLarge</item>
+        <item name="textAppearanceTitleMedium">@style/TextAppearance.W2M.TitleMedium</item>
+        <item name="textAppearanceTitleSmall">@style/TextAppearance.W2M.TitleSmall</item>
+        <item name="textAppearanceBodyLarge">@style/TextAppearance.W2M.BodyLarge</item>
+        <item name="textAppearanceBodyMedium">@style/TextAppearance.W2M.BodyMedium</item>
+        <item name="textAppearanceBodySmall">@style/TextAppearance.W2M.BodySmall</item>
+        <item name="textAppearanceLabelLarge">@style/TextAppearance.W2M.LabelLarge</item>
+        <item name="textAppearanceLabelMedium">@style/TextAppearance.W2M.LabelMedium</item>
+        <item name="textAppearanceLabelSmall">@style/TextAppearance.W2M.LabelSmall</item>
+    </style>
 </resources>
