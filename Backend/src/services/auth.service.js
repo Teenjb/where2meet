@@ -1,4 +1,4 @@
-const m_user = require("../models/m_user.js");
+const { User } = require("../models/models.js");
 const { checkRegex, hashPassword, comparePassword } = require("../utils/auth.util.js");
 const jwt = require("jsonwebtoken");
 
@@ -8,7 +8,7 @@ async function login(req, res) {
   try {
     await checkRegex(username, null, password, "login");
     // If valid, check if user exists
-    const user = await m_user.findOne({
+    const user = await User.findOne({
       where: {
         username: username,
       },
@@ -34,7 +34,7 @@ async function register(req, res) {
   try {
     await checkRegex(username, email, password, "register");
 
-    const existingUser = await m_user.findOne({
+    const existingUser = await User.findOne({
       where: {
         username: username,
       },
@@ -45,7 +45,7 @@ async function register(req, res) {
     } else {
       const hashedPassword = await hashPassword(password);
 
-      const newUser = await m_user.create({
+      const newUser = await User.create({
         username: username,
         password: hashedPassword,
         email: email,
@@ -60,7 +60,7 @@ async function register(req, res) {
 
 async function details(req, res) {
   const id = req.user;
-  const user = await m_user.findOne({
+  const user = await User.findOne({
     where: {
       id: id,
     },
