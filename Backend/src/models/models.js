@@ -59,7 +59,7 @@ const UserGroup = sequelize.define("UserGroup", {
   },
   lang: {
     type: DataTypes.STRING
-  },
+  }
 });
 
 User.belongsToMany(Group, { through: UserGroup });
@@ -67,5 +67,6 @@ Group.belongsToMany(User, { through: UserGroup });
 
 module.exports = {
   User,
-  Group
+  Group,
+  UserGroup
 };
