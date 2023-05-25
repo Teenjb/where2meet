@@ -5,7 +5,7 @@ const cors = require("cors");
 const app = express();
 require("dotenv").config();
 const sequelize = require("./configs/db.config.js");
-const authRouter = require("./routes/auth.route.js");
+const authRouter = require("./routes/route.js");
 
 const corsOptions = {
   origin: "*",
