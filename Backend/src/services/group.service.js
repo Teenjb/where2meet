@@ -24,7 +24,9 @@ async function createGroup(req, res) {
       GroupId: group.id,
     });
 
-    return res.status(201).json({ message: "Group created", group, userGroup });
+    return res
+      .status(201)
+      .json({ message: "Group created", data: { group, userGroup } });
   } catch (error) {
     console.error("Error creating group:", error);
     return res.status(500).json({ error: "Failed to create group" });
@@ -53,7 +55,9 @@ async function getGroupByUserId(req, res) {
     if (userGroup === null || !userGroup) {
       return res.status(404).json({ message: "Group not found" });
     } else {
-      return res.status(200).json({ message: "Group found", userGroup });
+      return res
+        .status(200)
+        .json({ message: "Group found", data: { userGroup } });
     }
   } catch (error) {
     console.error("Error getting group:", error);
@@ -64,16 +68,18 @@ async function getGroupByUserId(req, res) {
 async function getGroupByGroupId(req, res) {
   try {
     const { groupId } = req.query;
-    const userGroup = await UserGroup.findAll({
+    const group = await Group.findAll({
       where: {
-        GroupId: groupId,
+        id: groupId,
       },
     });
 
-    if (userGroup === null || !userGroup) {
+    if (group === null || !group) {
       return res.status(404).json({ message: "Group not found" });
     } else {
-      return res.status(200).json({ message: "Group found", userGroup });
+      return res
+        .status(200)
+        .json({ message: "Group found", data: { group } });
     }
   } catch (error) {
     console.error("Error getting group:", error);
@@ -100,7 +106,7 @@ async function updateGroup(req, res) {
     if (group === null || !group) {
       return res.status(404).json({ message: "Group not found" });
     } else {
-      return res.status(200).json({ message: "Group updated", group });
+      return res.status(200).json({ message: "Group updated" });
     }
   } catch (error) {
     console.error("Error updating group:", error);

@@ -20,7 +20,7 @@ async function login(req, res) {
     }
     if (await comparePassword(password, user.password)) {
       const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
-      res.status(200).json({ message: "Login successful", token: token });
+      res.status(200).json({ message: "Login successful", data: {token: token} });
     } else {
       res.status(401).json({ message: "Login failed" });
     }
@@ -69,7 +69,7 @@ async function details(req, res) {
   if (!user) {
     res.status(404).json({ message: "User not found" });
   } else {
-    res.status(200).json({ message: "User found", user: user });
+    res.status(200).json({ message: "User found", data: user });
   }
 }
 
