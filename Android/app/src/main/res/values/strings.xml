@@ -1,5 +1,20 @@
 <resources>
-  <string name="app_name">Where2Meet</string>
-  <!-- TODO: Remove or change this placeholder text -->
-  <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="app_name">Where2Meet</string>
+    <string name="lbl_register_now">Don\'t have an account? Register</string>
+    <string name="lbl_email">Email</string>
+    <string name="lbl_password">Password</string>
+    <string name="lbl_login">Login</string>
+    <string name="lbl_username">Username</string>
+    <string name="validation_field_required">%s is required</string>
+    <string name="lbl_login_now">Already have an account? Login</string>
+    <string name="lbl_retype_password">Re-type password</string>
+    <string name="lbl_register">Register</string>
+    <string name="validation_confirm_password">Password does not match</string>
+    <string name="validation_email">Email is not valid</string>
+    <string name="msg_register_success">Registered successfully!</string>
+    <string name="msg_login_success">Logged in!</string>
+    <string name="msg_logout">Logged out!</string>
+    <string name="lbl_greeting">Hello, %s</string>
+    <string name="validation_password">Password must be minimum 8 characters with uppercase and number</string>
+    <string name="validation_username">Username must be alphabet and numeric only</string>
 </resources>

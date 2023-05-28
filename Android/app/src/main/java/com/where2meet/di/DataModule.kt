@@ -5,6 +5,7 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import com.where2meet.BuildConfig
 import com.where2meet.core.data.preference.DataStoreManager
 import com.where2meet.core.data.remote.NoConnectionInterceptor
+import com.where2meet.core.data.remote.api.ApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,7 +27,7 @@ import javax.inject.Singleton
 class DataModule {
     companion object {
         const val DEFAULT_TIMEOUT = 5L
-        var BASE_URL = "https://where2meet-backend-wtlln4sbra-et.a.run.app"
+        var BASE_URL = "https://where2meet-backend-wtlln4sbra-et.a.run.app/w2m/"
     }
 
     private val json = Json {
@@ -37,7 +38,7 @@ class DataModule {
     @Singleton
     @Provides
     fun provideNoConnectionInterceptor(
-        @ApplicationContext appContext: Context
+        @ApplicationContext appContext: Context,
     ): NoConnectionInterceptor =
         NoConnectionInterceptor(appContext)
 
@@ -73,16 +74,16 @@ class DataModule {
         return json.asConverterFactory("application/json".toMediaType())
     }
 
-    // @Singleton
-    // @Provides
-    // fun provideStoryApiService(client: OkHttpClient, factory: Converter.Factory): StoryApiService {
-    //     val retrofit = Retrofit.Builder()
-    //         .baseUrl(BASE_URL)
-    //         .client(client)
-    //         .addConverterFactory(factory)
-    //         .build()
-    //     return retrofit.create(StoryApiService::class.java)
-    // }
+    @Singleton
+    @Provides
+    fun provideApiService(client: OkHttpClient, factory: Converter.Factory): ApiService {
+        val retrofit = Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .client(client)
+            .addConverterFactory(factory)
+            .build()
+        return retrofit.create(ApiService::class.java)
+    }
 
     @Singleton
     @Provides

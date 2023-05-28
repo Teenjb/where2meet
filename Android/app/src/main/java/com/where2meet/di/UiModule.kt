@@ -17,7 +17,7 @@ class UiModule {
     @Provides
     fun provideCoilLoader(
         @ApplicationContext context: Context,
-        client: OkHttpClient
+        client: OkHttpClient,
     ) = ImageLoader.Builder(context)
         .okHttpClient(client)
         .crossfade(true)

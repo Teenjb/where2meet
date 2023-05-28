@@ -13,12 +13,12 @@ import java.util.Locale
 
 private fun Fragment.createSnackbar(
     message: String,
-    duration: Int
+    duration: Int,
 ): Snackbar = Snackbar.make(requireView(), message, duration)
 
 fun Fragment.snackbar(
     message: String,
-    duration: Int = Snackbar.LENGTH_SHORT
+    duration: Int = Snackbar.LENGTH_SHORT,
 ) {
     createSnackbar(message, duration).show()
 }
@@ -26,14 +26,14 @@ fun Fragment.snackbar(
 fun Fragment.snackbar(
     message: String,
     anchorView: View,
-    duration: Int = Snackbar.LENGTH_SHORT
+    duration: Int = Snackbar.LENGTH_SHORT,
 ) {
     createSnackbar(message, duration).apply { setAnchorView(anchorView) }.show()
 }
 
 fun Fragment.toast(
     message: String,
-    duration: Int = Toast.LENGTH_SHORT
+    duration: Int = Toast.LENGTH_SHORT,
 ) {
     Toast.makeText(requireContext(), message, duration).show()
 }
@@ -44,17 +44,17 @@ fun toggleAppTheme(value: String) {
             AppTheme.LIGHT.name -> AppCompatDelegate.MODE_NIGHT_NO
             AppTheme.DARK.name -> AppCompatDelegate.MODE_NIGHT_YES
             else -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-        }
+        },
     )
 }
 
 fun formatDateString(dateString: String, pattern: String): String =
     DateTimeFormatter.ofPattern(pattern, Locale.getDefault()).format(
-        LocalDateTime.parse(dateString, DateTimeFormatter.ISO_DATE_TIME)
+        LocalDateTime.parse(dateString, DateTimeFormatter.ISO_DATE_TIME),
     )
 
 fun Fragment.checkPermission(permission: String): Boolean =
     ContextCompat.checkSelfPermission(
         requireActivity(),
-        permission
+        permission,
     ) == PackageManager.PERMISSION_GRANTED

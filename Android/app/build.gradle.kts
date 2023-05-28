@@ -103,9 +103,9 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
 
     // other
-    implementation("io.coil-kt:coil:2.3.0")
+    implementation("io.coil-kt:coil:2.4.0")
     implementation("com.squareup.logcat:logcat:0.1")
-    implementation("id.zelory:compressor:3.0.1")
+    implementation("io.github.reactivecircus.flowbinding:flowbinding-android:1.2.0")
 
     // unit testing
     testImplementation("junit:junit:4.13.2")
@@ -116,6 +116,6 @@ dependencies {
 
     // instrumentation testing
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("org.assertj:assertj-core:3.21.0")
+    androidTestImplementation("org.assertj:assertj-core:3.24.2")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 }

@@ -16,7 +16,7 @@ import kotlin.reflect.KProperty
 class FragmentViewBindingDelegate<T : ViewBinding> private constructor(
     private val fragment: Fragment,
     viewBindingBind: ((View) -> T)? = null,
-    viewBindingClazz: Class<T>? = null
+    viewBindingClazz: Class<T>? = null,
 ) : ReadOnlyProperty<Fragment, T> {
 
     private var binding: T? = null
@@ -39,8 +39,8 @@ class FragmentViewBindingDelegate<T : ViewBinding> private constructor(
 
         check(
             fragment.viewLifecycleOwner.lifecycle.currentState.isAtLeast(
-                Lifecycle.State.INITIALIZED
-            )
+                Lifecycle.State.INITIALIZED,
+            ),
         ) {
             "Attempt to get view binding when fragment view is destroyed"
         }
@@ -76,18 +76,18 @@ class FragmentViewBindingDelegate<T : ViewBinding> private constructor(
     companion object Factory {
         fun <T : ViewBinding> from(
             fragment: Fragment,
-            viewBindingBind: (View) -> T
+            viewBindingBind: (View) -> T,
         ): FragmentViewBindingDelegate<T> = FragmentViewBindingDelegate(
             fragment = fragment,
-            viewBindingBind = viewBindingBind
+            viewBindingBind = viewBindingBind,
         )
 
         fun <T : ViewBinding> from(
             fragment: Fragment,
-            viewBindingClazz: Class<T>
+            viewBindingClazz: Class<T>,
         ): FragmentViewBindingDelegate<T> = FragmentViewBindingDelegate(
             fragment = fragment,
-            viewBindingClazz = viewBindingClazz
+            viewBindingClazz = viewBindingClazz,
         )
     }
 }

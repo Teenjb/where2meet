@@ -1,6 +1,12 @@
 package com.where2meet.core.data.remote
 
+import com.where2meet.core.data.remote.json.ApiResponse
+import com.where2meet.core.data.remote.json.StatusResponse
 import com.where2meet.utils.ApiException
+import com.where2meet.utils.NoInternetException
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.serialization.json.Json
 import logcat.logcat
 import org.json.JSONException
 import retrofit2.Response
@@ -8,7 +14,6 @@ import retrofit2.Response
 open class SafeApiRequest {
     suspend fun <T : Any> apiRequest(
         call: suspend () -> Response<T>,
-        decodeErrorJson: suspend (String) -> String,
     ): T {
         val response = call.invoke()
         if (response.isSuccessful) {
@@ -17,9 +22,10 @@ open class SafeApiRequest {
         } else {
             val error = response.errorBody()?.string()
             val message = StringBuilder()
-            error?.let {
+            error?.let { errStr ->
                 try {
-                    message.append(decodeErrorJson(it))
+                    logcat { "Error response is " + decodeErrorApiResponse(errStr) }
+                    message.append(decodeErrorApiResponse(errStr))
                 } catch (e: JSONException) {
                     e.printStackTrace()
                 }
@@ -28,3 +34,20 @@ open class SafeApiRequest {
         }
     }
 }
+
+inline fun <T> wrapFlowApiCall(crossinline function: suspend () -> Result<T>): Flow<Result<T>> =
+    flow {
+        try {
+            emit(function())
+        } catch (ex: ApiException) {
+            emit(Result.failure(ex))
+        } catch (ex: NoInternetException) {
+            emit(Result.failure(ex))
+        }
+    }
+
+fun decodeErrorApiResponse(str: String): String =
+    Json.decodeFromString(
+        ApiResponse.serializer(StatusResponse.serializer()),
+        str,
+    ).message
