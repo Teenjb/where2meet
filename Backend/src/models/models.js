@@ -1,29 +1,33 @@
-const { DataTypes, Model } = require('sequelize');
+const { DataTypes, Model } = require("sequelize");
 const sequelize = require("../configs/db.config.js");
 
-const User = sequelize.define('User', {
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
-    allowNull: false
+const User = sequelize.define(
+  "User",
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+      allowNull: false,
+    },
+    username: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
   },
-  username: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  password: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-}, {
-  sequelize, 
-  modelName: 'User' 
-});
+  {
+    sequelize,
+    modelName: "User",
+  }
+);
 
 const Group = sequelize.define(
   "Group",
@@ -41,7 +45,7 @@ const Group = sequelize.define(
     status: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: "Pending"
+      defaultValue: "Pending",
     },
     result: {
       type: DataTypes.STRING,
@@ -55,11 +59,20 @@ const Group = sequelize.define(
 
 const UserGroup = sequelize.define("UserGroup", {
   lat: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
   },
   lang: {
-    type: DataTypes.STRING
-  }
+    type: DataTypes.STRING,
+  },
+  isAdmin: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+  },
+  code: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
 });
 
 User.belongsToMany(Group, { through: UserGroup });
@@ -68,5 +81,5 @@ Group.belongsToMany(User, { through: UserGroup });
 module.exports = {
   User,
   Group,
-  UserGroup
+  UserGroup,
 };

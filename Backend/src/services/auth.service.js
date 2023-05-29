@@ -61,7 +61,9 @@ async function register(req, res) {
 
 async function details(req, res) {
   const id = req.user;
-  const user = await User.findOne({
+  const user = await User.findAll({
+    include: Group,
+    attributes: {exclude: ["password"]},
     where: {
       id: id,
     },

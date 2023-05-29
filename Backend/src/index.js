@@ -1,9 +1,9 @@
+require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const port = process.env.PORT || 3000;
 const cors = require("cors");
 const app = express();
-require("dotenv").config();
 const sequelize = require("./configs/db.config.js");
 const authRouter = require("./routes/route.js");
 
@@ -13,8 +13,8 @@ const corsOptions = {
   optionsSuccessStatus: 200,
 };
 
-sequelize.sync({}).then(() => {
-  console.log("synced");
+sequelize.sync({ alter: true }).then(() => {
+  console.log("################# DATABASE SYNCED #################");
 });
 
 app.use(cors(corsOptions));

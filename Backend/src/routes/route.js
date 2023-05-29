@@ -8,6 +8,7 @@ const {
   updateGroup,
   deleteMember,
   deleteGroup,
+  joinGroup,
 } = require("../controllers/group.controller");
 const verifyToken = require("../middlewares/jwt.middlewares");
 
@@ -18,7 +19,7 @@ router.get("/details", verifyToken, details);
 
 // Routes for groups
 router.post("/createGroup", verifyToken, createGroup);
-router.post("/joinGroup", verifyToken, createGroup);
+router.post("/joinGroup", verifyToken, joinGroup);
 router.get("/getGroupByUserId", verifyToken, getGroupByUserId);
 router.get("/getGroupByGroupId", verifyToken, getGroupByGroupId);
 router.put("/updateGroup", verifyToken, updateGroup);
