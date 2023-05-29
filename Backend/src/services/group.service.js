@@ -90,29 +90,23 @@ async function joinGroup(req, res) {
 }
 
 async function getGroupByUserId(req, res) {
+  const { pageSize, pageNumber } = req.query;
   try {
     const userId = req.user;
-    const data = await User.findOne({
-      attributes: {
-        exclude: [
-          "password",
-          "createdAt",
-          "updatedAt",
-          "username",
-          "email",
-          "id",
-        ],
-      },
-      include: Group,
+    const user = await User.findOne({
       where: {
         id: userId,
       },
     });
 
-    if (data === null || !data) {
+    const countGroup = await user.countGroups();
+
+    const groups = await user.getGroups({limit: pageSize, offset: (pageNumber - 1) * pageSize})
+
+    if (groups === null || !groups) {
       return res.status(404).json({ message: "Group not found" });
     } else {
-      return res.status(200).json({ message: "Group found", data });
+      return res.status(200).json({ message: "Group found", data: {totalPage : Math.ceil(countGroup/pageSize), pageNumber: pageNumber, pageSize: pageSize, Groups: groups} });
     }
   } catch (error) {
     console.error("Error getting group:", error);
