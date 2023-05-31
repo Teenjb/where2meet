@@ -1,0 +1,173 @@
+openapi: '3.0.0'
+info:
+  version: '1.0.0'
+  title: 'where2meet'
+  description: where2meet
+servers:
+  - url: "https://where2meet-backend-wtlln4sbra-et.a.run.app/w2m"
+    description: Production
+
+paths:
+  /login:
+    post:
+      summary: Login
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+              example:
+                username: w2mdev1
+                password: Dev1password
+      responses:
+        200:
+          description: Login Successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Login Successful
+                  data:
+                    type: object
+                    properties:
+                      token:
+                        type: string
+                        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjg1MzUxMzA3fQ.CGwLOab58FOLz1nuDqCV4cHZCdzbfe13LlhFGPisGtM
+                      user:
+                        $ref: '#/components/schemas/user'
+        400:
+          description: Login failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                Wrong username:
+                  value:
+                    message: User does not exist
+                Wrong password:
+                  value:
+                    message: Invalid password
+  /register:
+    post:
+      summary: Register
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                email:
+                  type: string
+              example:
+                username: w2mdev1
+                password: Dev1password
+                email: w2mdev1@gmail.com
+      responses:
+        201:
+          description: User created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                example:
+                  message: User created
+
+components:
+  schemas:
+    UserId:
+      description: A unique identifier of a user
+      type: integer
+      example: 1
+    user:
+      description: A user object
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/UserId'
+        username:
+          type: string
+          example: w2mdev1
+        email:
+          type: string
+          example: w2mdev1@gmail.com
+    GroupId:
+      description: A unique identifier of a group
+      type: integer
+      example: 1
+    group:
+      description: A group object
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/GroupId'
+        status:
+          type: string
+          enum:
+            - Pending
+            - Done
+        name:
+          type: string
+          example: nax mobil
+        adminId:
+          $ref: '#/components/schemas/UserId'
+        result:
+          type: string
+        code:
+          type: string
+          example: c9eeWk
+        createdAt:
+          type: string
+          example: 2023-05-31T15:00:38.171Z
+        updatedAt:
+          type: string
+          example: 2023-05-31T15:00:38.171Z
+    MoodId:
+      description: A unique identifier of a mood
+      type: integer
+      example: 1
+    mood:
+      description: A group object
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/MoodId'
+        name:
+          type: string
+          example: 😄 Happy
+    userGroup:
+      description: Signifies a many-to-many relation between users and groups
+      type: object
+      properties:
+        UserId:
+          $ref: '#/components/schemas/UserId'
+        GroupId:
+          $ref: '#/components/schemas/GroupId'
+        mood:
+          type: array
+          items:
+            $ref: '#/components/schemas/MoodId'
+        lang:
+          type: number
+          example: -5.234567
+        lat:
+          type: number
+          example: 1.234567
+security:
+  - bearerAuth: [eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjg1MzUxMzA3fQ.CGwLOab58FOLz1nuDqCV4cHZCdzbfe13LlhFGPisGtM]
