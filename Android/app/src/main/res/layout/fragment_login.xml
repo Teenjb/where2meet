@@ -88,8 +88,9 @@
             android:id="@+id/tv_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="12dp"
             android:gravity="center"
+            android:padding="4dp"
             android:text="@string/lbl_register_now"
             android:textAppearance="?textAppearanceLabelMedium"
             app:layout_constraintBottom_toBottomOf="parent" />

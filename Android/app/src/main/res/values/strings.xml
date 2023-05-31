@@ -17,4 +17,28 @@
     <string name="lbl_greeting">Hello, %s</string>
     <string name="validation_password">Password must be minimum 8 characters with uppercase and number</string>
     <string name="validation_username">Username must be alphabet and numeric only</string>
+    <string name="lbl_search">Search</string>
+    <string name="lbl_greeting_subtitle">Plan your best hangouts here</string>
+    <string name="lbl_list_group">Hangout Groups</string>
+    <string name="lbl_detail_group">Detail Group</string>
+    <string name="lbl_generate">Generate</string>
+    <string name="lbl_btn_generate_placeholder">Please ask your group creator\n to generate recommendation</string>
+    <string name="lbl_member">Member</string>
+    <string name="lbl_delete">Delete</string>
+    <string name="lbl_onboarding_hero">Find your best\nhangout places</string>
+    <string name="lbl_onboarding_caption">Find your dream places to hangout\nbased on your and your friends\' preferences!</string>
+    <string name="cd_logo">Logo</string>
+    <string name="lbl_invite_member">Invite Member</string>
+    <string name="lbl_invite_desc">To invite member into your group\nplease use the invitation link below</string>
+    <string name="lbl_copy_link">Copy Link</string>
+    <string name="lbl_share">Share</string>
+    <string name="lbl_pick_mood">What’s your mood\ntoday?</string>
+    <string name="lbl_next">Next</string>
+    <string name="lbl_select_location">Select Location</string>
+    <string name="lbl_detect_location">Detect my current location</string>
+    <string name="lbl_pick_location_title">Where are you \nnow?</string>
+    <string name="lbl_pick_location_caption">We will use the location on the red marker.\nYou can reposition it or set it to detect your current location</string>
+    <string name="lbl_result_caption">Here are the places we recommend for your group,  based on you and your friend’s preference.</string>
+    <string name="lbl_open_in_map">Open in Maps</string>
+    <string name="lbl_result">Group Result</string>
 </resources>

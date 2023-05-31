@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Widget.W2M.MoodChip" parent="Widget.Material3.Chip.Filter">
+        <item name="chipBackgroundColor">@color/bg_mood_chip</item>
+        <item name="chipStrokeWidth">1dp</item>
+        <item name="chipStrokeColor">?colorTertiaryContainer</item>
+        <item name="chipStartPadding">12dp</item>
+        <item name="chipEndPadding">12dp</item>
+        <item name="chipMinHeight">36dp</item>
+    </style>
+</resources>

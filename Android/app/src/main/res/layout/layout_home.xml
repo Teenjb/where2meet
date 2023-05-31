@@ -31,13 +31,13 @@
             android:layout_marginTop="8dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="Hello, Fateen"
-            android:textAppearance="?textAppearanceHeadlineSmall" />
+            android:textAppearance="?textAppearanceHeadlineSmall"
+            tools:text="Hello, Fateen" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Plan your best hangouts here"
+            android:text="@string/lbl_greeting_subtitle"
             android:textAppearance="?textAppearanceTitleMedium" />
     </LinearLayout>
 
@@ -46,42 +46,18 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
+        android:layout_marginBottom="-24dp"
         app:cardCornerRadius="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/section_header">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp">
-
-            <TextView
-                android:id="@+id/lbl_sheet"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hangout groups"
-                android:textAppearance="?textAppearanceLabelLarge"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/cta_see_all"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="See all"
-                android:textAppearance="?textAppearanceLabelLarge"
-                android:textColor="?colorPrimary"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_home"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintTop_toBottomOf="@id/lbl_sheet"
-                tools:itemCount="5"
-                tools:listitem="@layout/item_group_hangout" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        <!--when complete-->
+        <include
+            android:id="@+id/content"
+            layout="@layout/layout_home_sheet" />
+        <!--when error-->
+        <include
+            android:id="@+id/error"
+            layout="@layout/layout_error"
+            android:visibility="gone" />
     </com.google.android.material.card.MaterialCardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

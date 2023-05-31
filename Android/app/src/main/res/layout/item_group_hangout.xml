@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="16dp"
+    android:clickable="true"
+    android:focusable="true"
     app:cardBackgroundColor="?colorPrimaryContainer"
     app:strokeColor="?colorPrimary">
 
@@ -16,17 +18,26 @@
 
         <TextView
             android:id="@+id/tv_name"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:textAppearance="?textAppearanceTitleMedium"
+            app:layout_constraintEnd_toStartOf="@id/status_card"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Group Name" />
 
         <TextView
             android:id="@+id/tv_members"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:textAppearance="?textAppearanceBodySmall"
+            app:layout_constraintEnd_toEndOf="@id/tv_name"
+            app:layout_constraintStart_toStartOf="@id/tv_name"
             app:layout_constraintTop_toBottomOf="@id/tv_name"
             tools:text="Group Name" />
 
