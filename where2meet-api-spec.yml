@@ -18,11 +18,10 @@ paths:
               properties:
                 username:
                   type: string
+                  example: w2mdev1
                 password:
                   type: string
-              example:
-                username: w2mdev1
-                password: Dev1password
+                  example: Dev1password
       responses:
         200:
           description: Login Successful
@@ -88,7 +87,187 @@ paths:
                     type: string
                 example:
                   message: User created
+  /createGroup:
+    post:
+      summary: Create Group
+      description: Create a group and add the user as admin
+      responses:
+        201:
+          description: Group created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Group created
+                  data:
+                    type: object
+                    properties:
+                      group:
+                        $ref: '#/components/schemas/group'
+  /joinGroup:
+    post:
+      summary: Join Group
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              properties:
+                code:
+                  $ref: '#/components/schemas/GroupCode'
+      responses:
+        200:
+          description: Group joined
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Group joined
+                  data:
+                    type: object
+                    properties:
+                      group:
+                        $ref: '#/components/schemas/group'
+        400:
+          description: Group not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Group not found
+  /getGroupByUserId:
+    get:
+      summary: Get Groups By User Id
+      parameters:
+        - name: pageSize
+          schema:
+            type: integer
+          in: query
+          required: true
+        - name: pageNumber
+          schema:
+              type: integer
+          in: query
+          required: true
+      responses:
+        200:
+          description: Groups found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Groups found
+                  data:
+                    type: object
+                    properties:
+                      groups:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/group'
 
+  /getGroupByGroupId:
+    get:
+      summary: Get Group By Group Id
+      parameters:
+        - name: groupId
+          schema:
+            $ref: '#/components/schemas/GroupId'
+          in: query
+          required: true
+      responses:
+        200:
+          description: Group found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Groups found
+                  data:
+                    $ref: '#/components/schemas/group'
+  /updateGroup:
+    put:
+      summary: Update Group
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              properties:
+                groupId:
+                  $ref: '#/components/schemas/GroupId'
+                name:
+                  type: string
+                  example: nax mobil
+      responses:
+        200:
+          description: Group updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Group updated
+                  data:
+                    $ref: '#/components/schemas/group'
+  /deleteMember:
+    delete:
+      summary: Delete Member
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              properties:
+                groupId:
+                  $ref: '#/components/schemas/GroupId'
+                userId:
+                  $ref: '#/components/schemas/UserId'
+      responses:
+        200:
+          description: Member deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Member deleted
+  /deleteGroup:
+    delete:
+      summary: Delete Group
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              properties:
+                groupId:
+                  $ref: '#/components/schemas/GroupId'
+      responses:
+        200:
+          description: Group deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Group deleted
 components:
   schemas:
     UserId:
@@ -111,6 +290,10 @@ components:
       description: A unique identifier of a group
       type: integer
       example: 1
+    GroupCode:
+      description: A unique identifier of a group in code form
+      type: string
+      example: c9eeWk
     group:
       description: A group object
       type: object
@@ -130,8 +313,7 @@ components:
         result:
           type: string
         code:
-          type: string
-          example: c9eeWk
+          $ref: '#/components/schemas/GroupCode'
         createdAt:
           type: string
           example: 2023-05-31T15:00:38.171Z
