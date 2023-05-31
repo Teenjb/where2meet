@@ -1,15 +1,15 @@
 const { User, Group, UserGroup } = require("../models/models.js");
 const { generateCode } = require("../utils/group.util.js");
-const { Op } = require("sequelize");
+const { Op, Association } = require("sequelize");
 
 async function createGroup(req, res) {
   try {
-    const { groupName } = req.body;
     const userId = req.user;
+    const code = await generateCode();
 
     const existingGroup = await Group.findOne({
       where: {
-        groupName: groupName,
+        name: code,
       },
     });
 
@@ -17,22 +17,18 @@ async function createGroup(req, res) {
       return res.status(409).json({ message: "Group already exists" });
     }
 
-    const code = await generateCode();
-
     const group = await Group.create({
-      groupName: groupName,
+      name: code,
+      code: code,
     });
 
     const userGroup = await UserGroup.create({
       UserId: userId,
       GroupId: group.id,
-      code: code,
       isAdmin: true,
     });
 
-    return res
-      .status(201)
-      .json({ message: "Group created", data: { group, userGroup } });
+    return res.status(201).json({ message: "Group created", data: { group } });
   } catch (error) {
     console.error("Error creating group:", error);
     return res.status(500).json({ error: "Failed to create group" });
@@ -49,44 +45,33 @@ async function joinGroup(req, res) {
     const { code } = req.body;
     const userId = req.user;
 
-    const userGroup = await UserGroup.findOne({
+    const group = await Group.findOne({
       where: {
         code: code,
       },
     });
 
-    if (userGroup === null || !userGroup) {
+    if (group === null || !group) {
       return res.status(404).json({ message: "Group not found" });
     } else {
-      const group = await Group.findOne({
+      const existingUserGroup = await UserGroup.findOne({
         where: {
-          id: userGroup.GroupId,
+          UserId: userId,
+          GroupId: group.id,
         },
       });
 
-      if (group === null || !group) {
-        return res.status(404).json({ message: "Group not found" });
+      if (existingUserGroup) {
+        return res.status(409).json({ message: "Already joined group" });
       } else {
-        const existingUserGroup = await UserGroup.findOne({
-          where: {
-            UserId: userId,
-            GroupId: group.id,
-          },
+        const newUserGroup = await UserGroup.create({
+          UserId: userId,
+          GroupId: group.id,
         });
 
-        if (existingUserGroup) {
-          return res.status(409).json({ message: "Already joined group" });
-        } else {
-          const newUserGroup = await UserGroup.create({
-            UserId: userId,
-            GroupId: group.id,
-            code: code,
-          });
-
-          return res
-            .status(200)
-            .json({ message: "Group found", data: { group, newUserGroup } });
-        }
+        return res
+          .status(200)
+          .json({ message: "Group found", data: { group, newUserGroup } });
       }
     }
   } catch (error) {
@@ -107,12 +92,25 @@ async function getGroupByUserId(req, res) {
 
     const countGroup = await user.countGroups();
 
-    const groups = await user.getGroups({limit: pageSize, offset: (pageNumber - 1) * pageSize})
+    const groups = await user.getGroups({
+      limit: pageSize,
+      offset: (pageNumber - 1) * pageSize,
+    });
 
     if (groups === null || !groups) {
       return res.status(404).json({ message: "Group not found" });
     } else {
-      return res.status(200).json({ message: "Group found", data: {totalPage : Math.ceil(countGroup/pageSize), pageNumber: pageNumber, pageSize: pageSize, Groups: groups} });
+      return res
+        .status(200)
+        .json({
+          message: "Group found",
+          data: {
+            totalPage: Math.ceil(countGroup / pageSize),
+            pageNumber: pageNumber,
+            pageSize: pageSize,
+            Groups: groups,
+          },
+        });
     }
   } catch (error) {
     console.error("Error getting group:", error);
@@ -124,18 +122,15 @@ async function getGroupByGroupId(req, res) {
   try {
     const { groupId } = req.query;
     const group = await Group.findOne({
-      include: [{
-        model: User,
-        through: {attributes: []},
-        attributes: {
-          exclude: [
-            "password",
-            "createdAt",
-            "updatedAt",
-            "UserGroup",
-          ],
+      include: [
+        {
+          model: User,
+          through: { attributes: [] },
+          attributes: {
+            exclude: ["password", "createdAt", "updatedAt", "UserGroup"],
+          },
         },
-      }],
+      ],
       where: {
         id: groupId,
       },
@@ -152,36 +147,74 @@ async function getGroupByGroupId(req, res) {
   }
 }
 
+async function getGroupByCode(req, res) {
+  const { code } = req.query;
+  try {
+    const group = await Group.findOne({
+      where: {
+        code: code,
+      }
+    });
+
+    if (group === null || !group || group === []) {
+      return res.status(404).json({ message: "Group not found" });
+    } else {
+      return res.status(200).json({ message: "Group found", data: { group } });
+    }
+  } catch (error) {
+    console.error("Error getting group:", error);
+    return res.status(500).json({ error: "Failed to get group" });
+  }
+}
+
 async function searchGroup(req, res) {
   try {
-    const { groupName } = req.query;
+    const { name } = req.query;
     const group = await Group.findAll({
       where: {
-        groupName: {
-          [Op.iLike]: `%${groupName}%`,
+        name: {
+          [Op.iLike]: `%${name}%`,
         },
       },
     });
 
     if (group === null || !group) {
       return res.status(404).json({ message: "Group not found" });
-    }
-    else {
+    } else {
       return res.status(200).json({ message: "Group found", data: { group } });
     }
-
   } catch (error) {
     console.error("Error searching group:", error);
     return res.status(500).json({ error: "Failed to search group" });
   }
 }
 
+async function filterGroup(req, res) {
+  try {
+    const { status } = req.query;
+    const group = await Group.findAll({
+      where: {
+        status: status,
+      },
+    });
+
+    if (group === null || !group) {
+      return res.status(404).json({ message: "Group not found" });
+    } else {
+      return res.status(200).json({ message: "Group found", data: { group } });
+    }
+  } catch (error) {
+    console.error("Error filtering group:", error);
+    return res.status(500).json({ error: "Failed to filter group" });
+  }
+}
+
 async function updateGroup(req, res) {
   try {
-    const { groupId, groupName, status, result } = req.body;
+    const { groupId, name, status, result } = req.body;
     const group = await Group.update(
       {
-        groupName: groupName,
+        name: name,
         status: status ? status : "Pending",
         result: result ? result : null,
       },
@@ -206,17 +239,19 @@ async function updateGroup(req, res) {
 async function deleteMember(req, res) {
   try {
     const { groupId, userId } = req.body;
+    
     const userGroup = await UserGroup.destroy({
       where: {
         GroupId: groupId,
         UserId: userId,
+        isAdmin: false,
       },
     });
 
     if (userGroup === null || !userGroup) {
       return res.status(404).json({ message: "Group not found" });
     } else {
-      return res.status(200).json({ message: "Group updated", userGroup });
+      return res.status(200).json({ message: "Member deleted", userGroup });
     }
   } catch (error) {
     console.error("Error deleting member:", error);
@@ -227,16 +262,30 @@ async function deleteMember(req, res) {
 async function deleteGroup(req, res) {
   try {
     const { groupId } = req.body;
-    const group = await Group.destroy({
+    const userId = req.user;
+
+    const isAdmin = await UserGroup.findOne({
       where: {
-        id: groupId,
+        GroupId: groupId,
+        UserId: userId,
+        isAdmin: true,
       },
     });
 
-    if (group === null || !group) {
-      return res.status(404).json({ message: "Group not found" });
+    if (isAdmin === null || !isAdmin) {
+      return res.status(401).json({ message: "Unauthorized" });
     } else {
-      return res.status(200).json({ message: "Group deleted", group });
+      const userGroup = await UserGroup.destroy({
+        where: {
+          GroupId: groupId,
+        },
+      });
+
+      if (userGroup === null || !userGroup) {
+        return res.status(404).json({ message: "Group not found" });
+      } else {
+        return res.status(200).json({ message: "Group deleted", userGroup });
+      }
     }
   } catch (error) {
     console.error("Error deleting group:", error);
@@ -249,7 +298,9 @@ module.exports = {
   joinGroup,
   getGroupByUserId,
   getGroupByGroupId,
+  getGroupByCode,
   searchGroup,
+  filterGroup,
   updateGroup,
   deleteMember,
   deleteGroup,

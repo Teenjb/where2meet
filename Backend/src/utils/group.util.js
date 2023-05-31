@@ -1,11 +1,11 @@
 const crypto = require("crypto");
-const { UserGroup } = require("../models/models");
+const { Group } = require("../models/models");
 
 async function generateCode() {
   do {
     var code = crypto.randomBytes(3).toString("hex");
-    UserGroup.findOne({ where: { code: code } });
-  } while (UserGroup.code === code);
+    Group.findOne({ where: { code: code } });
+  } while (Group.code === code);
   return code;
 }
 

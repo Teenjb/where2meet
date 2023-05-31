@@ -38,9 +38,13 @@ const Group = sequelize.define(
       primaryKey: true,
       allowNull: false,
     },
-    groupName: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    code: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
     status: {
       type: DataTypes.STRING,
@@ -69,10 +73,10 @@ const UserGroup = sequelize.define("UserGroup", {
     allowNull: false,
     defaultValue: false,
   },
-  code: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
+  // mood: {
+  //   type: DataTypes.JSON,
+  //   allowNull: true,
+  // },
 });
 
 User.belongsToMany(Group, { through: UserGroup });

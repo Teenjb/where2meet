@@ -32,9 +32,25 @@ async function getGroupByGroupId(req, res) {
   }
 }
 
+async function getGroupByCode(req, res) {
+  try {
+    await group.getGroupByCode(req, res);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
 async function searchGroup(req, res) {
   try {
     await group.searchGroup(req, res);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+async function filterGroup(req, res) {
+  try {
+    await group.filterGroup(req, res);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -69,7 +85,9 @@ module.exports = {
   joinGroup,
   getGroupByUserId,
   getGroupByGroupId,
+  getGroupByCode,
   searchGroup,
+  filterGroup,
   updateGroup,
   deleteMember,
   deleteGroup,
