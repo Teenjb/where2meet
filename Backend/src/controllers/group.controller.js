@@ -32,6 +32,14 @@ async function getGroupByGroupId(req, res) {
   }
 }
 
+async function searchGroup(req, res) {
+  try {
+    await group.searchGroup(req, res);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
 async function updateGroup(req, res) {
   try {
     await group.updateGroup(req, res);
@@ -61,6 +69,7 @@ module.exports = {
   joinGroup,
   getGroupByUserId,
   getGroupByGroupId,
+  searchGroup,
   updateGroup,
   deleteMember,
   deleteGroup,
