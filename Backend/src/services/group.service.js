@@ -20,6 +20,7 @@ async function createGroup(req, res) {
     const group = await Group.create({
       name: code,
       code: code,
+      adminId: userId,
     });
 
     const userGroup = await UserGroup.create({
@@ -28,7 +29,7 @@ async function createGroup(req, res) {
       isAdmin: true,
     });
 
-    return res.status(201).json({ message: "Group created", data: { group } });
+    return res.status(201).json({ message: "Group created", data: { group, userGroup } });
   } catch (error) {
     console.error("Error creating group:", error);
     return res.status(500).json({ error: "Failed to create group" });
@@ -191,12 +192,36 @@ async function searchGroup(req, res) {
 
 async function filterGroup(req, res) {
   try {
-    const { status } = req.query;
-    const group = await Group.findAll({
-      where: {
-        status: status,
-      },
-    });
+    const { status, userId } = req.query;
+    let group = null;
+    // Filter based on user id available or not
+    if (userId === null || !userId) {
+      // Get all group
+      group = await Group.findAll({
+        where: {
+          status: status,
+        },
+      });
+    } else {
+      // Get group based on user id
+      group = await Group.findAll({
+        include: [
+          {
+            model: User,
+            through: { attributes: [] },
+            where: {
+              id: userId,
+            },
+            attributes: {
+              exclude: ["password", "createdAt", "updatedAt", "UserGroup"],
+            },
+          },
+        ],
+        where: {
+          status: status,
+        },
+      });
+    }
 
     if (group === null || !group) {
       return res.status(404).json({ message: "Group not found" });
@@ -281,10 +306,16 @@ async function deleteGroup(req, res) {
         },
       });
 
+      const group = await Group.destroy({
+        where: {
+          id: groupId,
+        },
+      });
+
       if (userGroup === null || !userGroup) {
         return res.status(404).json({ message: "Group not found" });
       } else {
-        return res.status(200).json({ message: "Group deleted", userGroup });
+        return res.status(200).json({ message: "Group deleted", group, userGroup });
       }
     }
   } catch (error) {

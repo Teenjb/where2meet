@@ -38,6 +38,10 @@ const Group = sequelize.define(
       primaryKey: true,
       allowNull: false,
     },
+    adminId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
     name: {
       type: DataTypes.STRING,
       allowNull: false,
