@@ -93,6 +93,24 @@ paths:
                     type: string
                 example:
                   message: User created
+  /me:
+    get:
+      summary: Get details of self (like login response)
+      tags:
+        - Auth
+      responses:
+        200:
+          description: User data fetched
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User data fetched
+                  data:
+                    $ref: '#/components/schemas/user'
   /createGroup:
     post:
       summary: Create Group
