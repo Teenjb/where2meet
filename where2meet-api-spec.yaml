@@ -11,6 +11,7 @@ paths:
   /login:
     post:
       summary: Login
+      security: []
       requestBody:
         content:
           application/x-www-form-urlencoded:
@@ -60,6 +61,7 @@ paths:
   /register:
     post:
       summary: Register
+      security: []
       requestBody:
         content:
           application/x-www-form-urlencoded:
@@ -351,5 +353,11 @@ components:
         lat:
           type: number
           example: 1.234567
+  securitySchemes:
+    bearerAuth: 
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
 security:
-  - bearerAuth: [eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjg1MzUxMzA3fQ.CGwLOab58FOLz1nuDqCV4cHZCdzbfe13LlhFGPisGtM]
+  - bearerAuth: []
