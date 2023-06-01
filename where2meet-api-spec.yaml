@@ -330,6 +330,30 @@ paths:
                   message:
                     type: string
                     example: Group deleted
+  /groups/recommendation/{groupId}:
+    post:
+      summary: Generate Recommendation for a Group
+      tags:
+        - Group Administration
+      parameters:
+        - name: groupId
+          schema:
+            $ref: '#/components/schemas/GroupId'
+          in: path
+          required: true
+      responses:
+        200:
+          description: Group recommendation generated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Group recommendation generated
+                  data:
+                    $ref: '#/components/schemas/group'
   /moods:
     get:
       summary: Get list of moods
