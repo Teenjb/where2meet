@@ -11,6 +11,8 @@ paths:
   /login:
     post:
       summary: Login
+      tags:
+        - Auth
       security: []
       requestBody:
         content:
@@ -62,6 +64,8 @@ paths:
     post:
       summary: Register
       security: []
+      tags:
+        - Auth
       requestBody:
         content:
           application/x-www-form-urlencoded:
@@ -93,6 +97,8 @@ paths:
     post:
       summary: Create Group
       description: Create a group and add the user as admin
+      tags:
+        - Group Administration
       responses:
         201:
           description: Group created
@@ -112,6 +118,8 @@ paths:
   /joinGroup:
     post:
       summary: Join Group
+      tags:
+        - Group Activity As Member
       requestBody:
         content:
           application/x-www-form-urlencoded:
@@ -148,6 +156,8 @@ paths:
   /getGroupByUserId:
     get:
       summary: Get Groups By User Id
+      tags:
+        - Group Activity As Member
       parameters:
         - name: pageSize
           schema:
@@ -181,6 +191,8 @@ paths:
   /groups/{groupId}:
     get:
       summary: Get Group By Group Id
+      tags:
+        - Group Activity As Member
       parameters:
         - name: groupId
           schema:
@@ -219,6 +231,8 @@ paths:
   /updateGroup:
     put:
       summary: Update Group
+      tags:
+        - Group Administration
       requestBody:
         content:
           application/x-www-form-urlencoded:
@@ -245,6 +259,8 @@ paths:
   /deleteMember:
     delete:
       summary: Delete Member
+      tags:
+        - Group Administration
       requestBody:
         content:
           application/x-www-form-urlencoded:
@@ -268,6 +284,8 @@ paths:
   /deleteGroup:
     delete:
       summary: Delete Group
+      tags:
+        - Group Administration
       requestBody:
         content:
           application/x-www-form-urlencoded:
@@ -307,6 +325,8 @@ paths:
   /userGroup/location/{groupId}:
     put:
       summary: Set location of a user on a group
+      tags:
+        - Group Activity As Member
       parameters:
         - name: groupId
           schema:
@@ -346,6 +366,8 @@ paths:
   /userGroup/mood/{groupId}:
     put:
       summary: Set mood of a user on a group
+      tags:
+        - Group Activity As Member
       parameters:
         - name: groupId
           schema:
