@@ -153,9 +153,17 @@ paths:
                   message:
                     type: string
                     example: Group not found
-  /getGroupByUserId:
+  /groups:
     get:
-      summary: Get Groups By User Id
+      summary: Get Groups joined by a user
+      description: |
+        Get Groups joined by a user \
+        sorted by userGroup.createdAt (aka when the user joins a group) descending \
+        \
+        groups list may be empty (user hasn't joined any groups yet) but will return 400 status code if search query is entered \
+        \
+        formula for pageCount is `ceil([total results count] / pageSize)` \
+        (don't forget that `int/int` might result in int and so the result might automatically be floored)
       tags:
         - Group Activity As Member
       parameters:
@@ -169,6 +177,11 @@ paths:
               type: integer
           in: query
           required: true
+        - name: search
+          schema:
+            type: string
+          in: query
+          required: false
       responses:
         200:
           description: Groups found
@@ -183,10 +196,23 @@ paths:
                   data:
                     type: object
                     properties:
+                      pageCount:
+                        type: integer
+                        example: 1
                       groups:
                         type: array
                         items:
-                          $ref: '#/components/schemas/group'
+                          $ref: '#/components/schemas/groupSmall'
+        400:
+          description: Search query entered and groups not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Groups not found
 
   /groups/{groupId}:
     get:
@@ -479,6 +505,24 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/userOnGroup'
+    groupSmall:
+      description: A concise group object
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/GroupId'
+        name:
+          type: string
+          example: nax mobil
+        status:
+          type: string
+          enum:
+            - Pending
+            - Done
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/userSmall'
     MoodId:
       description: A unique identifier of a mood
       type: integer
