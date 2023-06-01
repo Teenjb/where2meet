@@ -270,6 +270,102 @@ paths:
                   message:
                     type: string
                     example: Group deleted
+  /moods:
+    get:
+      summary: Get list of moods
+      responses:
+        200:
+          description: Moods found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Moods found
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/mood'
+  /userGroup/location/{groupId}:
+    put:
+      summary: Set location of a user on a group
+      parameters:
+        - name: groupId
+          schema:
+            $ref: '#/components/schemas/GroupId'
+          in: path
+          required: true
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              properties:
+                lang:
+                  type: number
+                lat:
+                  type: number
+      responses:
+        200:
+          description: User location set
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User location set
+        400:
+          description: Group not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Group not found
+  /userGroup/mood/{groupId}:
+    put:
+      summary: Set mood of a user on a group
+      parameters:
+        - name: groupId
+          schema:
+            $ref: '#/components/schemas/GroupId'
+          in: path
+          required: true
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              properties:
+                moods:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/MoodId' # ini ntar dicek apakah bener bisa keterima berbentuk array
+      responses:
+        200:
+          description: User location set
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User location set
+        400:
+          description: Group not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Group not found
 components:
   schemas:
     UserId:
