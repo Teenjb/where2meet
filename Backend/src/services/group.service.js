@@ -29,7 +29,7 @@ async function createGroup(req, res) {
       isAdmin: true,
     });
 
-    return res.status(201).json({ message: "Group created", data: { group, userGroup } });
+    return res.status(201).json({ message: "Group created", data: { group } });
   } catch (error) {
     console.error("Error creating group:", error);
     return res.status(500).json({ error: "Failed to create group" });
@@ -72,7 +72,7 @@ async function joinGroup(req, res) {
 
         return res
           .status(200)
-          .json({ message: "Group found", data: { group, newUserGroup } });
+          .json({ message: "Group found", data: { group } });
       }
     }
   } catch (error) {
@@ -94,6 +94,8 @@ async function getGroupByUserId(req, res) {
     const countGroup = await user.countGroups();
 
     const groups = await user.getGroups({
+      attributes: ["id", "name", "code", "createdAt", "updatedAt"],
+      exclude: ["UserGroup"],
       limit: pageSize,
       offset: (pageNumber - 1) * pageSize,
     });
@@ -101,17 +103,15 @@ async function getGroupByUserId(req, res) {
     if (groups === null || !groups) {
       return res.status(404).json({ message: "Group not found" });
     } else {
-      return res
-        .status(200)
-        .json({
-          message: "Group found",
-          data: {
-            totalPage: Math.ceil(countGroup / pageSize),
-            pageNumber: pageNumber,
-            pageSize: pageSize,
-            Groups: groups,
-          },
-        });
+      return res.status(200).json({
+        message: "Group found",
+        data: {
+          totalPage: Math.ceil(countGroup / pageSize),
+          pageNumber: pageNumber,
+          pageSize: pageSize,
+          Groups: groups,
+        },
+      });
     }
   } catch (error) {
     console.error("Error getting group:", error);
@@ -154,7 +154,7 @@ async function getGroupByCode(req, res) {
     const group = await Group.findOne({
       where: {
         code: code,
-      }
+      },
     });
 
     if (group === null || !group || group === []) {
@@ -208,7 +208,6 @@ async function filterGroup(req, res) {
         include: [
           {
             model: User,
-            through: { attributes: [] },
             where: {
               id: userId,
             },
@@ -247,13 +246,17 @@ async function updateGroup(req, res) {
         where: {
           id: groupId,
         },
+        returning: true,
+        plain: true,
       }
     );
-
+    const data = group[1].dataValues;
     if (group === null || !group) {
       return res.status(404).json({ message: "Group not found" });
     } else {
-      return res.status(200).json({ message: "Group updated" });
+      return res
+        .status(200)
+        .json({ message: "Group updated", data });
     }
   } catch (error) {
     console.error("Error updating group:", error);
@@ -264,7 +267,7 @@ async function updateGroup(req, res) {
 async function deleteMember(req, res) {
   try {
     const { groupId, userId } = req.body;
-    
+
     const userGroup = await UserGroup.destroy({
       where: {
         GroupId: groupId,
@@ -315,7 +318,9 @@ async function deleteGroup(req, res) {
       if (userGroup === null || !userGroup) {
         return res.status(404).json({ message: "Group not found" });
       } else {
-        return res.status(200).json({ message: "Group deleted", group, userGroup });
+        return res
+          .status(200)
+          .json({ message: "Group deleted", group, userGroup });
       }
     }
   } catch (error) {

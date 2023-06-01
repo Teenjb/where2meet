@@ -72,11 +72,6 @@ const UserGroup = sequelize.define("UserGroup", {
   lang: {
     type: DataTypes.STRING,
   },
-  isAdmin: {
-    type: DataTypes.BOOLEAN,
-    allowNull: false,
-    defaultValue: false,
-  },
   // mood: {
   //   type: DataTypes.JSON,
   //   allowNull: true,

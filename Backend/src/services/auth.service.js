@@ -1,12 +1,15 @@
 const { User, Group, UserGroup } = require("../models/models.js");
-const { checkRegex, hashPassword, comparePassword } = require("../utils/auth.util.js");
+const {
+  checkRegex,
+  hashPassword,
+  comparePassword,
+} = require("../utils/auth.util.js");
 const jwt = require("jsonwebtoken");
 
 async function login(req, res) {
-  const { username, password } = req.query;
+  const { username, password } = req.body;
   // Check if username and password are valid
   try {
-    console.log(username, password);
     await checkRegex(username, null, password, "login");
     // If valid, check if user exists
     const user = await User.findOne({
@@ -20,7 +23,13 @@ async function login(req, res) {
     }
     if (await comparePassword(password, user.password)) {
       const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
-      res.status(200).json({ message: "Login successful", data: {token: token} });
+      res.status(200).json({
+        message: "Login successful",
+        data: {
+          token: token,
+          user: { id: user.id, username: user.username, email: user.email },
+        },
+      });
     } else {
       res.status(401).json({ message: "Login failed" });
     }
@@ -61,9 +70,8 @@ async function register(req, res) {
 
 async function details(req, res) {
   const id = req.user;
-  const user = await User.findAll({
-    include: Group,
-    attributes: {exclude: ["password"]},
+  const user = await User.findOne({
+    attributes: { exclude: ["password"] },
     where: {
       id: id,
     },
@@ -79,4 +87,4 @@ module.exports = {
   login,
   register,
   details,
-}
+};
