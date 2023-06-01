@@ -457,14 +457,6 @@ components:
         username:
           type: string
           example: w2mdev1
-    GroupId:
-      description: A unique identifier of a group
-      type: integer
-      example: 1
-    GroupCode:
-      description: A unique identifier of a group in code form
-      type: string
-      example: c9eeWk
     position:
       description: A position object
       type: object
@@ -475,6 +467,46 @@ components:
         lat:
           type: number
           example: 1.234567
+    LocationId:
+      description: A unique identifier of a location
+      type: integer
+      example: 1
+    location:
+      description: A location object (hangout place)
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/LocationId'
+        name:
+          type: string
+          example: Siomay Enak Non-Halal
+        address:
+          type: string
+          example: Serpong, Tangerang Selatan
+        image_link:
+          type: string
+          example: https://example-website.com/example-image.jpg
+        position:
+          $ref: '#/components/schemas/position'
+    resultLocation:
+      description: |
+        A location object and its rank on a group recommendation generator \
+        On backend, this is implemented as a many-to-many relationship between group and location
+      type: object
+      properties:
+        rank:
+          type: integer
+          example: 1
+        location:
+          $ref: '#/components/schemas/location'
+    GroupId:
+      description: A unique identifier of a group
+      type: integer
+      example: 1
+    GroupCode:
+      description: A unique identifier of a group in code form
+      type: string
+      example: c9eeWk
     group:
       description: A group object
       type: object
@@ -492,13 +524,21 @@ components:
         admin:
           $ref: '#/components/schemas/userSmall'
         result:
-          type: string
+          description: When fetched, this is always sorted by rank ascending
+          nullable: true
+          type: array
+          items:
+            $ref: '#/components/schemas/resultLocation'
         code:
           $ref: '#/components/schemas/GroupCode'
         createdAt:
           type: string
           example: 2023-05-31T15:00:38.171Z
         updatedAt:
+          type: string
+          example: 2023-05-31T15:00:38.171Z
+        generatedAt:
+          nullable: true
           type: string
           example: 2023-05-31T15:00:38.171Z
         users:
