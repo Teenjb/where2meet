@@ -178,14 +178,14 @@ paths:
                         items:
                           $ref: '#/components/schemas/group'
 
-  /getGroupByGroupId:
+  /groups/{groupId}:
     get:
       summary: Get Group By Group Id
       parameters:
         - name: groupId
           schema:
             $ref: '#/components/schemas/GroupId'
-          in: query
+          in: path
           required: true
       responses:
         200:
@@ -197,9 +197,25 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Groups found
+                    example: Group found
                   data:
                     $ref: '#/components/schemas/group'
+        400:
+          description: Group not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                User is not a member of the group:
+                  value:
+                    message: User is not a member of the group
+                Group doesn't exist:
+                  value:
+                    message: Group doesn't exist
   /updateGroup:
     put:
       summary: Update Group
@@ -384,6 +400,15 @@ components:
         email:
           type: string
           example: w2mdev1@gmail.com
+    userSmall:
+      description: A user object
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/UserId'
+        username:
+          type: string
+          example: w2mdev1
     GroupId:
       description: A unique identifier of a group
       type: integer
@@ -392,6 +417,16 @@ components:
       description: A unique identifier of a group in code form
       type: string
       example: c9eeWk
+    position:
+      description: A position object
+      type: object
+      properties:
+        lang:
+          type: number
+          example: -5.234567
+        lat:
+          type: number
+          example: 1.234567
     group:
       description: A group object
       type: object
@@ -406,8 +441,8 @@ components:
         name:
           type: string
           example: nax mobil
-        adminId:
-          $ref: '#/components/schemas/UserId'
+        admin:
+          $ref: '#/components/schemas/userSmall'
         result:
           type: string
         code:
@@ -418,12 +453,16 @@ components:
         updatedAt:
           type: string
           example: 2023-05-31T15:00:38.171Z
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/userOnGroup'
     MoodId:
       description: A unique identifier of a mood
       type: integer
       example: 1
     mood:
-      description: A group object
+      description: A mood object
       type: object
       properties:
         id:
@@ -439,16 +478,24 @@ components:
           $ref: '#/components/schemas/UserId'
         GroupId:
           $ref: '#/components/schemas/GroupId'
-        mood:
+        moods:
           type: array
           items:
             $ref: '#/components/schemas/MoodId'
-        lang:
-          type: number
-          example: -5.234567
-        lat:
-          type: number
-          example: 1.234567
+        position:
+          $ref: '#/components/schemas/position'
+    userOnGroup:
+      description: A user object with additional information about the group
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/userSmall'
+        moods:
+          type: array
+          items:
+            $ref: '#/components/schemas/mood'
+        position:
+          $ref: '#/components/schemas/position'
   securitySchemes:
     bearerAuth: 
       type: http
