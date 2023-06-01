@@ -515,6 +515,7 @@ components:
     resultLocation:
       description: |
         A location object and its rank on a group recommendation generator \
+        always fetched as part of a group object \
         On backend, this is implemented as a many-to-many relationship between group and location
       type: object
       properties:
@@ -568,7 +569,7 @@ components:
         users:
           type: array
           items:
-            $ref: '#/components/schemas/userOnGroup'
+            $ref: '#/components/schemas/userGroup'
     groupSmall:
       description: A concise group object
       type: object
@@ -601,21 +602,10 @@ components:
           type: string
           example: 😄 Happy
     userGroup:
-      description: Signifies a many-to-many relation between users and groups
-      type: object
-      properties:
-        UserId:
-          $ref: '#/components/schemas/UserId'
-        GroupId:
-          $ref: '#/components/schemas/GroupId'
-        moods:
-          type: array
-          items:
-            $ref: '#/components/schemas/MoodId'
-        position:
-          $ref: '#/components/schemas/position'
-    userOnGroup:
-      description: A user object with additional information about the group
+      description: | 
+        A user object with additional information relating to a group \
+        always fetched as part of a group object \
+        on backend, this is implemented as a many-to-many relationship between group and user
       type: object
       properties:
         user:
