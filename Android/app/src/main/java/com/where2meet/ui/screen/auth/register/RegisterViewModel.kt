@@ -1,7 +1,7 @@
 package com.where2meet.ui.screen.auth.register
 
 import androidx.lifecycle.viewModelScope
-import com.where2meet.core.domain.model.AuthRegister
+import com.where2meet.core.domain.model.form.AuthRegister
 import com.where2meet.core.domain.repository.AuthRepository
 import com.where2meet.ui.base.BaseViewModel
 import com.where2meet.ui.base.Event
@@ -18,9 +18,9 @@ class RegisterViewModel @Inject constructor(
     fun onRegister(
         data: AuthRegister,
     ) {
-        fetchJob?.cancel()
-        Event.Loading.send()
-        fetchJob = viewModelScope.launch {
+        apiJob?.cancel()
+        apiJob = viewModelScope.launch {
+            Event.Loading.send()
             auth.register(data)
                 .catch { Event.Error(it).send() }
                 .collect { result ->

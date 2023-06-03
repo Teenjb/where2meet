@@ -41,4 +41,10 @@
     <string name="lbl_result_caption">Here are the places we recommend for your group,  based on you and your friend’s preference.</string>
     <string name="lbl_open_in_map">Open in Maps</string>
     <string name="lbl_result">Group Result</string>
+    <string name="dialog_location_permission_needed_message">This feature needs the location permission, please accept to use location functionality</string>
+    <string name="dialog_location_permission_needed_title">Location permission needed</string>
+    <string name="dialog_location_permission_rejected_message">To use this feature, please grant the location permission from the settings app</string>
+    <string name="dialog_location_permission_rejected_title">Location permission denied</string>
+    <string name="err_location_not_found">Location not found</string>
+    <string name="err_max_chip_selected">You can only select up to %d chips!</string>
 </resources>

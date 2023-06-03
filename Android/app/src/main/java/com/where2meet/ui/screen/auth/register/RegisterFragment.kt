@@ -12,7 +12,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.where2meet.R
-import com.where2meet.core.domain.model.AuthRegister
+import com.where2meet.core.domain.model.form.AuthRegister
 import com.where2meet.databinding.FragmentRegisterBinding
 import com.where2meet.ui.base.BaseFragment
 import com.where2meet.ui.base.Event
@@ -22,6 +22,7 @@ import com.where2meet.ui.base.forms.disable
 import com.where2meet.ui.base.forms.enable
 import com.where2meet.ui.base.forms.validate
 import com.where2meet.ui.ext.snackbar
+import com.where2meet.ui.ext.toast
 import com.where2meet.ui.ext.viewBinding
 import com.where2meet.ui.screen.auth.AuthEvent
 import com.where2meet.utils.Regexes
@@ -42,9 +43,8 @@ class RegisterFragment : BaseFragment(R.layout.fragment_register) {
                 when (event) {
                     is AuthEvent.RegisterSuccess -> {
                         toggleLoading(false)
-                        snackbar(
+                        toast(
                             getString(R.string.msg_register_success),
-                            binding.tvLogin,
                         )
                         navigateTo(RegisterFragmentDirections.actionToLogin())
                     }

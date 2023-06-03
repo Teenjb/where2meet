@@ -3,13 +3,13 @@ package com.where2meet.core.data.interactor
 import com.where2meet.core.data.preference.DataStoreManager
 import com.where2meet.core.data.remote.SafeApiRequest
 import com.where2meet.core.data.remote.api.ApiService
+import com.where2meet.core.data.remote.json.auth.LoginBody
 import com.where2meet.core.data.remote.json.auth.RegisterBody
 import com.where2meet.core.data.remote.wrapFlowApiCall
-import com.where2meet.core.domain.model.AuthLogin
-import com.where2meet.core.domain.model.AuthRegister
 import com.where2meet.core.domain.model.Session
+import com.where2meet.core.domain.model.form.AuthLogin
+import com.where2meet.core.domain.model.form.AuthRegister
 import com.where2meet.core.domain.repository.AuthRepository
-import com.where2meet.utils.ApiException
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -18,20 +18,19 @@ class AuthRepositoryImpl @Inject constructor(
     private val preference: DataStoreManager,
 ) : AuthRepository, SafeApiRequest() {
     override suspend fun login(data: AuthLogin): Flow<Result<String>> = wrapFlowApiCall {
-        val login = apiRequest {
-            api.login(data.username, data.password)
+        val body = LoginBody(data.username, data.password)
+        val response = apiRequest {
+            api.login(body)
         }
-        val token = login.data?.token ?: throw ApiException("Login token is empty")
-        val username = apiRequest {
-            api.fetchUserDetail("Bearer $token")
-        }.data?.username ?: data.username
+        val (token, user) = response.data ?: throw IllegalStateException("Data is empty")
         // create new session
         val newSession = Session(
             token,
-            username,
+            user.id,
+            user.username,
         )
         preference.addSession(newSession)
-        Result.success(login.message)
+        Result.success(response.message)
     }
 
     override suspend fun logout() {

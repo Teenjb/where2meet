@@ -7,10 +7,13 @@ import coil.transform.RoundedCornersTransformation
 import com.where2meet.R
 import com.where2meet.databinding.FragmentHomeBinding
 import com.where2meet.ui.base.BaseFragment
-import com.where2meet.ui.ext.snackbar
+import com.where2meet.ui.ext.toast
 import com.where2meet.ui.ext.viewBinding
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import reactivecircus.flowbinding.android.view.clicks
 
 class HomeFragment : BaseFragment(R.layout.fragment_home) {
     private val binding by viewBinding<FragmentHomeBinding>()
@@ -22,9 +25,8 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                     when (menuItem.itemId) {
                         R.id.action_logout -> {
                             viewModel.onLogout()
-                            snackbar(
+                            toast(
                                 getString(R.string.msg_logout),
-                                binding.bottomAppBar,
                             )
                             navigateTo(HomeFragmentDirections.actionToOnboarding())
                             true
@@ -32,6 +34,18 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
 
                         else -> true
                     }
+                }
+            }
+
+            fab.clicks().onEach {
+                navigateTo(HomeFragmentDirections.actionToPickMood())
+            }.launchIn(lifecycleScope)
+
+            with(home) {
+                with(content) {
+                    ctaSeeAll.clicks().onEach {
+                        navigateTo(HomeFragmentDirections.actionToListGroup())
+                    }.launchIn(lifecycleScope)
                 }
             }
         }

@@ -6,6 +6,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class ResultViewModel @Inject constructor(
+class GroupResultViewModel @Inject constructor(
     private val group: GroupRepository,
 ) : BaseViewModel()

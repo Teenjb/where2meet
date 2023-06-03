@@ -34,14 +34,16 @@ class DataStoreManager(
         get() = prefsDataStore.data.map { prefs ->
             Session(
                 token = prefs[Keys.SESSION_TOKEN_KEY] ?: "",
+                userId = prefs[Keys.SESSION_USERID_KEY] ?: 0,
                 username = prefs[Keys.SESSION_USERNAME_KEY] ?: "",
             )
         }
 
     suspend fun addSession(data: Session) {
         prefsDataStore.edit { prefs ->
-            prefs[Keys.SESSION_USERNAME_KEY] = data.username
             prefs[Keys.SESSION_TOKEN_KEY] = "Bearer $data.token"
+            prefs[Keys.SESSION_USERID_KEY] = data.userId
+            prefs[Keys.SESSION_USERNAME_KEY] = data.username
         }
     }
 
@@ -49,6 +51,7 @@ class DataStoreManager(
         prefsDataStore.edit { prefs ->
             prefs[Keys.SESSION_TOKEN_KEY] = ""
             prefs[Keys.SESSION_USERNAME_KEY] = ""
+            prefs[Keys.SESSION_USERID_KEY] = 0
         }
     }
 

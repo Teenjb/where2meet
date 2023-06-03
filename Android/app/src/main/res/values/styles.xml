@@ -8,5 +8,7 @@
         <item name="chipStartPadding">12dp</item>
         <item name="chipEndPadding">12dp</item>
         <item name="chipMinHeight">36dp</item>
+        <item name="checkedIconEnabled">false</item>
+        <item name="checkedIcon">@null</item>
     </style>
 </resources>

@@ -1,7 +1,7 @@
 package com.where2meet.ui.screen.auth.login
 
 import androidx.lifecycle.viewModelScope
-import com.where2meet.core.domain.model.AuthLogin
+import com.where2meet.core.domain.model.form.AuthLogin
 import com.where2meet.core.domain.repository.AuthRepository
 import com.where2meet.ui.base.BaseViewModel
 import com.where2meet.ui.base.Event
@@ -18,9 +18,9 @@ class LoginViewModel @Inject constructor(
     fun onLogin(
         data: AuthLogin,
     ) {
-        fetchJob?.cancel()
-        Event.Loading.send()
-        fetchJob = viewModelScope.launch {
+        apiJob?.cancel()
+        apiJob = viewModelScope.launch {
+            Event.Loading.send()
             auth.login(data)
                 .catch { Event.Error(it).send() }
                 .collect { result ->

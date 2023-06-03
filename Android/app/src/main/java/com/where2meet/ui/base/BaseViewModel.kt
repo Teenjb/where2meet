@@ -14,14 +14,14 @@ abstract class BaseViewModel : ViewModel() {
     private val mutableEvents = Channel<Event>()
     val events: Flow<Event> = mutableEvents.receiveAsFlow()
 
-    protected var fetchJob: Job? = null
+    protected var apiJob: Job? = null
 
     protected fun Event.send() {
         viewModelScope.launch { mutableEvents.send(this@send) }
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        viewModelScope.cancel()
-    }
+    // override fun onCleared() {
+    //     super.onCleared()
+    //     viewModelScope.cancel()
+    // }
 }

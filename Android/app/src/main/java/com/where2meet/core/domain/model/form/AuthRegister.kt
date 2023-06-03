@@ -1,4 +1,4 @@
-package com.where2meet.core.domain.model
+package com.where2meet.core.domain.model.form
 
 data class AuthRegister(
     val username: String,
