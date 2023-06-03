@@ -521,16 +521,6 @@ components:
         displayText:
           type: string
           example: 😄 Happy
-    position:
-      description: A position object
-      type: object
-      properties:
-        lang:
-          type: number
-          example: -5.234567
-        lat:
-          type: number
-          example: 1.234567
     location:
       description: A location object (hangout place)
       type: object
@@ -543,8 +533,12 @@ components:
         image_link:
           type: string
           example: https://example-website.com/example-image.jpg
-        position:
-          $ref: '#/components/schemas/position'
+        lang:
+          type: number
+          example: -5.234567
+        lat:
+          type: number
+          example: 1.234567
     group:
       description: A group object
       type: object
@@ -626,8 +620,12 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/mood'
-        position:
-          $ref: '#/components/schemas/position'
+        lang:
+          type: number
+          example: -5.234567
+        lat:
+          type: number
+          example: 1.234567
   securitySchemes:
     bearerAuth: 
       type: http
