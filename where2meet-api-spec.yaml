@@ -517,6 +517,9 @@ components:
           $ref: '#/components/schemas/MoodId'
         name:
           type: string
+          example: happy
+        displayText:
+          type: string
           example: 😄 Happy
     position:
       description: A position object
