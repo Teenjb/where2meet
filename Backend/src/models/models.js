@@ -94,7 +94,7 @@ const Mood = sequelize.define("Mood", {
   name: {
     type: DataTypes.STRING,
   },
-  displayName: {
+  displayText: {
     type: DataTypes.STRING,
   },
 },

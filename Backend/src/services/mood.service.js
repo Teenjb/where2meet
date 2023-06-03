@@ -2,11 +2,11 @@ const { User, Group, UserGroup, Mood } = require("../models/models.js");
 
 async function createMood(req, res) {
   try {
-    const { name, displayName } = req.body;
+    const { name, displayText } = req.body;
 
     const newMood = await Mood.create({
       name: name,
-      displayName: displayName,
+      displayText: displayText,
     });
 
     return res
@@ -21,7 +21,7 @@ async function createMood(req, res) {
 async function getMoods(req, res) {
     try {
         const moods = await Mood.findAll({
-            attributes: ["id", "name", "displayName"],
+            attributes: ["id", "name", "displayText"],
         });
         return res.status(200).json({ message: "Moods found", data: moods });
     } catch (error) {
