@@ -95,9 +95,11 @@ async function joinGroup(req, res) {
           GroupId: group.id,
         });
 
+        const getGroup = await getGroupDetail(group.id);
+
         return res
           .status(200)
-          .json({ message: "Group found", data: { group } });
+          .json({ message: "Group found", data: getGroup });
       }
     }
   } catch (error) {

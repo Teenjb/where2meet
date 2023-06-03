@@ -24,7 +24,7 @@ router.get("/me", verifyToken, details);
 
 // Routes for groups
 router.post("/groups", verifyToken, createGroup);
-router.post("/joinGroup", verifyToken, joinGroup);
+router.post("/groups/join", verifyToken, joinGroup);
 
 router.get("/getGroupByUserId", verifyToken, getGroupByUserId);
 router.get("/groups/:groupId", verifyToken, getGroupByGroupId);
