@@ -146,21 +146,8 @@ async function getGroupByUserId(req, res) {
 
 async function getGroupByGroupId(req, res) {
   try {
-    const { groupId } = req.query;
-    const group = await Group.findOne({
-      include: [
-        {
-          model: User,
-          through: { attributes: [] },
-          attributes: {
-            exclude: ["password", "createdAt", "updatedAt", "UserGroup"],
-          },
-        },
-      ],
-      where: {
-        id: groupId,
-      },
-    });
+    const { groupId } = req.params;
+    const group = await getGroupDetail(groupId)
 
     if (group === null || !group) {
       return res.status(404).json({ message: "Group not found" });
