@@ -111,7 +111,7 @@ paths:
                     example: User data fetched
                   data:
                     $ref: '#/components/schemas/user'
-  /createGroup:
+  /groups:
     post:
       summary: Create Group
       description: Create a group and add the user as admin
@@ -130,42 +130,6 @@ paths:
                     example: Group created
                   data:
                     $ref: '#/components/schemas/group'
-  /joinGroup:
-    post:
-      summary: Join Group
-      tags:
-        - Group Activity As Member
-      requestBody:
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              properties:
-                code:
-                  $ref: '#/components/schemas/GroupCode'
-      responses:
-        200:
-          description: Group joined
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Group joined
-                  data:
-                    $ref: '#/components/schemas/group'
-        400:
-          description: Group not found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Group not found
-  /groups:
     get:
       summary: Get Groups joined by a user
       description: |
@@ -227,16 +191,16 @@ paths:
                     example: Groups not found
 
   /groups/{groupId}:
+    parameters:
+    - name: groupId
+      schema:
+        $ref: '#/components/schemas/GroupId'
+      in: path
+      required: true
     get:
       summary: Get Group By Group Id
       tags:
         - Group Activity As Member
-      parameters:
-        - name: groupId
-          schema:
-            $ref: '#/components/schemas/GroupId'
-          in: path
-          required: true
       responses:
         200:
           description: Group found
@@ -266,7 +230,6 @@ paths:
                 Group doesn't exist:
                   value:
                     message: Group doesn't exist
-  /updateGroup:
     put:
       summary: Update Group
       tags:
@@ -276,8 +239,6 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               properties:
-                groupId:
-                  $ref: '#/components/schemas/GroupId'
                 name:
                   type: string
                   example: nax mobil
@@ -294,6 +255,56 @@ paths:
                     example: Group updated
                   data:
                     $ref: '#/components/schemas/group'
+    delete:
+      summary: Delete Group
+      tags:
+        - Group Administration
+      responses:
+        200:
+          description: Group deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Group deleted
+  /joinGroup:
+    post:
+      summary: Join Group
+      tags:
+        - Group Activity As Member
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              properties:
+                code:
+                  $ref: '#/components/schemas/GroupCode'
+      responses:
+        200:
+          description: Group joined
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Group joined
+                  data:
+                    $ref: '#/components/schemas/group'
+        400:
+          description: Group not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Group not found
   /deleteMember:
     delete:
       summary: Delete Member
@@ -319,29 +330,7 @@ paths:
                   message:
                     type: string
                     example: Member deleted
-  /deleteGroup:
-    delete:
-      summary: Delete Group
-      tags:
-        - Group Administration
-      requestBody:
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              properties:
-                groupId:
-                  $ref: '#/components/schemas/GroupId'
-      responses:
-        200:
-          description: Group deleted
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Group deleted
+
   /groups/recommendation/{groupId}:
     post:
       summary: Generate Recommendation for a Group
