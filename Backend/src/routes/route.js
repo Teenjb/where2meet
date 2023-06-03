@@ -13,7 +13,11 @@ const {
   deleteMember,
   deleteGroup,
 } = require("../controllers/group.controller");
-const { createMood, getMoods } = require("../controllers/mood.controller");
+const {
+  createMood,
+  getMoods,
+  updateMoods,
+} = require("../controllers/mood.controller");
 const verifyToken = require("../middlewares/jwt.middlewares");
 
 // Basic routes for auth
@@ -40,5 +44,6 @@ router.delete("/deleteGroup", verifyToken, deleteGroup);
 // Routes for moods
 router.post("/createMood", verifyToken, createMood);
 router.get("/moods", verifyToken, getMoods);
+router.put("/groups/:groupId/mood", verifyToken, updateMoods);
 
 module.exports = router;

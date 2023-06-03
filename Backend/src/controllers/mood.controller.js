@@ -9,14 +9,23 @@ async function createMood(req, res) {
 }
 
 async function getMoods(req, res) {
-    try {
-        await mood.getMoods(req, res);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
+  try {
+    await mood.getMoods(req, res);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+async function updateMoods(req, res) {
+  try {
+    await mood.updateMoods(req, res);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 }
 
 module.exports = {
-    createMood,
-    getMoods
+  createMood,
+  getMoods,
+  updateMoods,
 };
