@@ -26,10 +26,25 @@ async function createGroup(req, res) {
     const userGroup = await UserGroup.create({
       UserId: userId,
       GroupId: group.id,
-      isAdmin: true,
     });
 
-    return res.status(201).json({ message: "Group created", data: { group } });
+    const getGroup = await Group.findOne({
+      where: {
+        id: group.id,
+      },
+      include: [
+        {
+          model: User,
+          attributes: ["id", "username", "email"],
+          through: {
+            
+            attributes: {exclude: ["createdAt", "updatedAt", "UserId", "GroupId"]},
+          },
+        },
+      ],
+    });
+
+    return res.status(201).json({ message: "Group created", data: { group: getGroup } });
   } catch (error) {
     console.error("Error creating group:", error);
     return res.status(500).json({ error: "Failed to create group" });

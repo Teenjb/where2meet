@@ -58,6 +58,10 @@ const Group = sequelize.define(
     result: {
       type: DataTypes.STRING,
     },
+    generatedAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
   },
   {
     sequelize,
@@ -66,23 +70,47 @@ const Group = sequelize.define(
 );
 
 const UserGroup = sequelize.define("UserGroup", {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+    allowNull: false,
+  },
   lat: {
     type: DataTypes.STRING,
   },
   lang: {
     type: DataTypes.STRING,
   },
-  // mood: {
-  //   type: DataTypes.JSON,
-  //   allowNull: true,
-  // },
 });
+
+const Mood = sequelize.define("Mood", {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+    allowNull: false,
+  },
+  name: {
+    type: DataTypes.STRING,
+  },
+  displayName: {
+    type: DataTypes.STRING,
+  },
+},
+{
+  sequelize,
+  modelName: "Mood",
+});
+
 
 User.belongsToMany(Group, { through: UserGroup });
 Group.belongsToMany(User, { through: UserGroup });
+UserGroup.belongsToMany(Mood, { through: "UserGroupMood" });
 
 module.exports = {
   User,
   Group,
   UserGroup,
+  Mood
 };
