@@ -10,7 +10,7 @@ servers:
 paths:
   /login:
     post:
-      summary: Login
+      summary: Login ✅
       tags:
         - Auth
       security: []
@@ -62,7 +62,7 @@ paths:
                     message: Invalid password
   /register:
     post:
-      summary: Register
+      summary: Register ✅
       security: []
       tags:
         - Auth
@@ -95,7 +95,7 @@ paths:
                   message: User created
   /me:
     get:
-      summary: Get details of self (like login response)
+      summary: Get details of self (like login response) ✅
       tags:
         - Auth
       responses:
@@ -359,7 +359,7 @@ paths:
                     $ref: '#/components/schemas/group'
   /moods:
     get:
-      summary: Get list of moods
+      summary: Get list of moods ✅
       responses:
         200:
           description: Moods found
