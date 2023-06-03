@@ -540,9 +540,6 @@ components:
         name:
           type: string
           example: Siomay Enak Non-Halal
-        address:
-          type: string
-          example: Serpong, Tangerang Selatan
         image_link:
           type: string
           example: https://example-website.com/example-image.jpg
