@@ -1,6 +1,30 @@
-const { User, Group, UserGroup } = require("../models/models.js");
+const { User, Group, UserGroup, Mood } = require("../models/models.js");
 const { generateCode } = require("../utils/group.util.js");
 const { Op, Association } = require("sequelize");
+
+async function getGroupDetail(id) {
+  return await Group.findOne({
+    where: {
+      id: id,
+    },
+    include: [{
+      model: UserGroup,
+      as: "users",
+      attributes: ["lang", "lat"],
+      include: [
+      {
+        model: User,
+        attributes: ["id", "username"],
+      },
+      {
+        model: Mood,
+        as: "moods",
+        attributes: ["id", "name", "displayText"],
+      },
+      ]
+    }],
+  });
+}
 
 async function createGroup(req, res) {
   try {
@@ -28,21 +52,7 @@ async function createGroup(req, res) {
       GroupId: group.id,
     });
 
-    const getGroup = await Group.findOne({
-      where: {
-        id: group.id,
-      },
-      include: [
-        {
-          model: User,
-          attributes: ["id", "username", "email"],
-          through: {
-            
-            attributes: {exclude: ["createdAt", "updatedAt", "UserId", "GroupId"]},
-          },
-        },
-      ],
-    });
+    const getGroup = await getGroupDetail(group.id);
 
     return res.status(201).json({ message: "Group created", data: { group: getGroup } });
   } catch (error) {
