@@ -79,7 +79,10 @@ async function details(req, res) {
   if (!user) {
     res.status(404).json({ message: "User not found" });
   } else {
-    res.status(200).json({ message: "User found", data: user });
+    res.status(200).json({
+      message: "User found", 
+      data: { id: user.id, username: user.username, email: user.email } 
+    });
   }
 }
 
