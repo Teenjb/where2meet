@@ -121,8 +121,13 @@ async function getGroupByUserId(req, res) {
     const countGroup = await user.countGroups();
 
     const groups = await user.getGroups({
-      attributes: ["id", "name", "code", "createdAt", "updatedAt"],
-      exclude: ["UserGroup"],
+      include: [{
+        model: User,
+        attributes: ["id", "username"],
+        through: {attributes: []}
+      }],
+      attributes: ["id", "name", "status"],
+      through: {attributes: []}, // TODO find how to remove UserGroup attribute
       limit: pageSize,
       offset: (pageNumber - 1) * pageSize,
     });

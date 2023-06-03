@@ -107,6 +107,8 @@ Group.hasMany(UserGroup, { as: "users" });
 UserGroup.belongsTo(Group);
 User.hasMany(UserGroup);
 UserGroup.belongsTo(User);
+Group.belongsToMany(User, { through: "UserGroup" });
+User.belongsToMany(Group, { through: "UserGroup" });
 UserGroup.belongsToMany(Mood, { through: "UserGroupMood", as: "moods" });
 
 module.exports = {

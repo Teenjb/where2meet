@@ -26,7 +26,7 @@ router.get("/me", verifyToken, details);
 router.post("/groups", verifyToken, createGroup);
 router.post("/groups/join", verifyToken, joinGroup);
 
-router.get("/getGroupByUserId", verifyToken, getGroupByUserId);
+router.get("/groups", verifyToken, getGroupByUserId);
 router.get("/groups/:groupId", verifyToken, getGroupByGroupId);
 router.get("/getGroupByCode", verifyToken, getGroupByCode);
 router.get("/searchGroup", verifyToken, searchGroup);
