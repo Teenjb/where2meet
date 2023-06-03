@@ -129,10 +129,7 @@ paths:
                     type: string
                     example: Group created
                   data:
-                    type: object
-                    properties:
-                      group:
-                        $ref: '#/components/schemas/group'
+                    $ref: '#/components/schemas/group'
   /joinGroup:
     post:
       summary: Join Group
@@ -157,10 +154,7 @@ paths:
                     type: string
                     example: Group joined
                   data:
-                    type: object
-                    properties:
-                      group:
-                        $ref: '#/components/schemas/group'
+                    $ref: '#/components/schemas/group'
         400:
           description: Group not found
           content:
