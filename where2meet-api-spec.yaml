@@ -530,7 +530,7 @@ components:
         name:
           type: string
           example: Siomay Enak Non-Halal
-        image_link:
+        imageLink:
           type: string
           example: https://example-website.com/example-image.jpg
         lang:
