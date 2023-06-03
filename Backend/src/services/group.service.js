@@ -19,6 +19,9 @@ async function getGroupDetail(id) {
       {
         model: Mood,
         as: "moods",
+        through: {
+          attributes: [],
+        },
         attributes: ["id", "name", "displayText"],
       },
       ]
