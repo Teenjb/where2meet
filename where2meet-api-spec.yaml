@@ -553,8 +553,8 @@ components:
         name:
           type: string
           example: nax mobil
-        admin:
-          $ref: '#/components/schemas/userSmall'
+        adminId:
+          $ref: '#/components/schemas/UserId'
         result:
           description: When fetched, this is always sorted by rank ascending
           nullable: true
