@@ -270,7 +270,7 @@ paths:
                   message:
                     type: string
                     example: Group deleted
-  /joinGroup:
+  /groups/join:
     post:
       summary: Join Group
       tags:
@@ -305,20 +305,22 @@ paths:
                   message:
                     type: string
                     example: Group not found
-  /deleteMember:
+  /groups/{groupId}/members/{userId}:
+    parameters:
+    - name: groupId
+      schema:
+        $ref: '#/components/schemas/GroupId'
+      in: path
+      required: true
+    - name: userId
+      schema:
+        $ref: '#/components/schemas/UserId'
+      in: path
+      required: true
     delete:
       summary: Delete Member
       tags:
         - Group Administration
-      requestBody:
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              properties:
-                groupId:
-                  $ref: '#/components/schemas/GroupId'
-                userId:
-                  $ref: '#/components/schemas/UserId'
       responses:
         200:
           description: Member deleted
@@ -331,7 +333,7 @@ paths:
                     type: string
                     example: Member deleted
 
-  /groups/recommendation/{groupId}:
+  /groups/{groupId}/recommend:
     post:
       summary: Generate Recommendation for a Group
       tags:
@@ -373,7 +375,7 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/mood'
-  /userGroup/location/{groupId}:
+  /groups/{groupId}/location:
     put:
       summary: Set location of a user on a group
       tags:
@@ -414,7 +416,7 @@ paths:
                   message:
                     type: string
                     example: Group not found
-  /userGroup/mood/{groupId}:
+  /groups/{groupId}/mood:
     put:
       summary: Set mood of a user on a group
       tags:
