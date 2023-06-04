@@ -113,7 +113,7 @@ paths:
                     $ref: '#/components/schemas/user'
   /groups:
     post:
-      summary: Create Group
+      summary: Create Group ✅
       description: Create a group and add the user as admin
       tags:
         - Group Administration
@@ -204,7 +204,7 @@ paths:
       in: path
       required: true
     get:
-      summary: Get Group By Group Id
+      summary: Get Group By Group Id ✅
       tags:
         - Group Activity As Member
       responses:
