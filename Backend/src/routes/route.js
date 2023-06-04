@@ -12,6 +12,7 @@ const {
   updateGroup,
   deleteMember,
   deleteGroup,
+  updateLocation,
 } = require("../controllers/group.controller");
 const {
   createMood,
@@ -36,10 +37,11 @@ router.get("/getGroupByCode", verifyToken, getGroupByCode);
 router.get("/searchGroup", verifyToken, searchGroup);
 router.get("/filterGroup", verifyToken, filterGroup);
 
-router.put("/updateGroup", verifyToken, updateGroup);
+router.put("/groups/:groupId", verifyToken, updateGroup);
+router.put("/groups/:groupId/location", verifyToken, updateLocation);
 
-router.delete("/deleteMember", verifyToken, deleteMember);
-router.delete("/deleteGroup", verifyToken, deleteGroup);
+router.delete("/groups/:groupId/members/:userId", verifyToken, deleteMember);
+router.delete("/groups/:groupId", verifyToken, deleteGroup);
 
 // Routes for moods
 router.post("/createMood", verifyToken, createMood);

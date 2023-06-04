@@ -79,7 +79,7 @@ const UserGroup = sequelize.define("UserGroup", {
   lat: {
     type: DataTypes.STRING,
   },
-  lang: {
+  long: {
     type: DataTypes.STRING,
   },
 });

@@ -1,4 +1,10 @@
-const { User, Group, UserGroup, Mood } = require("../models/models.js");
+const {
+  User,
+  Group,
+  UserGroup,
+  Mood,
+  UserGroupMood,
+} = require("../models/models.js");
 const { generateCode } = require("../utils/group.util.js");
 const { Op, Association } = require("sequelize");
 
@@ -7,25 +13,27 @@ async function getGroupDetail(id) {
     where: {
       id: id,
     },
-    include: [{
-      model: UserGroup,
-      as: "users",
-      attributes: ["lang", "lat"],
-      include: [
+    include: [
       {
-        model: User,
-        attributes: ["id", "username"],
+        model: UserGroup,
+        as: "users",
+        attributes: ["long", "lat"],
+        include: [
+          {
+            model: User,
+            attributes: ["id", "username"],
+          },
+          {
+            model: Mood,
+            as: "moods",
+            through: {
+              attributes: [],
+            },
+            attributes: ["id", "name", "displayText"],
+          },
+        ],
       },
-      {
-        model: Mood,
-        as: "moods",
-        through: {
-          attributes: [],
-        },
-        attributes: ["id", "name", "displayText"],
-      },
-      ]
-    }],
+    ],
   });
 }
 
@@ -57,7 +65,9 @@ async function createGroup(req, res) {
 
     const getGroup = await getGroupDetail(group.id);
 
-    return res.status(201).json({ message: "Group created", data: { group: getGroup } });
+    return res
+      .status(201)
+      .json({ message: "Group created", data: { group: getGroup } });
   } catch (error) {
     console.error("Error creating group:", error);
     return res.status(500).json({ error: "Failed to create group" });
@@ -100,9 +110,7 @@ async function joinGroup(req, res) {
 
         const getGroup = await getGroupDetail(group.id);
 
-        return res
-          .status(200)
-          .json({ message: "Group found", data: getGroup });
+        return res.status(200).json({ message: "Group found", data: getGroup });
       }
     }
   } catch (error) {
@@ -124,11 +132,13 @@ async function getGroupByUserId(req, res) {
     const countGroup = await user.countGroups();
 
     const groups = await user.getGroups({
-      include: [{
-        model: User,
-        attributes: ["id", "username"],
-        through: {attributes: []}
-      }],
+      include: [
+        {
+          model: User,
+          attributes: ["id", "username"],
+          through: { attributes: [] },
+        },
+      ],
       attributes: ["id", "name", "status"],
       limit: pageSize,
       offset: (pageNumber - 1) * pageSize,
@@ -161,7 +171,7 @@ async function getGroupByUserId(req, res) {
 async function getGroupByGroupId(req, res) {
   try {
     const { groupId } = req.params;
-    const group = await getGroupDetail(groupId)
+    const group = await getGroupDetail(groupId);
 
     if (group === null || !group) {
       return res.status(404).json({ message: "Group not found" });
@@ -261,12 +271,11 @@ async function filterGroup(req, res) {
 
 async function updateGroup(req, res) {
   try {
-    const { groupId, name, status, result } = req.body;
+    const { groupId } = req.params;
+    const { name } = req.body;
     const group = await Group.update(
       {
         name: name,
-        status: status ? status : "Pending",
-        result: result ? result : null,
       },
       {
         where: {
@@ -276,13 +285,12 @@ async function updateGroup(req, res) {
         plain: true,
       }
     );
-    const data = group[1].dataValues;
     if (group === null || !group) {
       return res.status(404).json({ message: "Group not found" });
     } else {
-      return res
-        .status(200)
-        .json({ message: "Group updated", data });
+      const data = await getGroupDetail(groupId);
+      console.log(data);
+      return res.status(200).json({ message: "Group updated", data });
     }
   } catch (error) {
     console.error("Error updating group:", error);
@@ -292,20 +300,47 @@ async function updateGroup(req, res) {
 
 async function deleteMember(req, res) {
   try {
-    const { groupId, userId } = req.body;
+    const { groupId, userId } = req.params;
+    const adminId = req.user;
 
-    const userGroup = await UserGroup.destroy({
+    const group = await Group.findOne({
+      include: [
+        {
+          as: "users",
+          model: UserGroup,
+          where: {
+            UserId: userId,
+          },
+        },
+      ],
+
       where: {
-        GroupId: groupId,
-        UserId: userId,
-        isAdmin: false,
+        id: groupId,
       },
     });
+    console.log(JSON.stringify(group, null, 2));
+    //console.log(group.users[0].id);
 
-    if (userGroup === null || !userGroup) {
+    if (group === null || !group) {
       return res.status(404).json({ message: "Group not found" });
+    } else if (userId == adminId) {
+      return res.status(403).json({ message: "Cannot remove admin" });
+    } else if (group.adminId !== adminId) {
+      return res.status(403).json({ message: "Unauthorized" });
     } else {
-      return res.status(200).json({ message: "Member deleted", userGroup });
+      const userGroupMoodDelete = await UserGroupMood.destroy({
+        where: {
+          UserGroupId: group.users[0].id,
+        },
+      });
+
+      const userGroup = await UserGroup.destroy({
+        where: {
+          GroupId: groupId,
+          UserId: userId,
+        },
+      });
+      return res.status(200).json({ message: "Member deleted" });
     }
   } catch (error) {
     console.error("Error deleting member:", error);
@@ -315,43 +350,90 @@ async function deleteMember(req, res) {
 
 async function deleteGroup(req, res) {
   try {
-    const { groupId } = req.body;
+    const { groupId } = req.params;
     const userId = req.user;
 
-    const isAdmin = await UserGroup.findOne({
+    const group = await Group.findOne({
+      include: [
+        {
+          as: "users",
+          model: UserGroup,
+        },
+      ],
+
       where: {
-        GroupId: groupId,
-        UserId: userId,
-        isAdmin: true,
+        id: groupId,
       },
     });
 
-    if (isAdmin === null || !isAdmin) {
+    if (group === null || !group) {
+      return res.status(401).json({ message: "Group not found" });
+    } else if (group.adminId !== userId) {
       return res.status(401).json({ message: "Unauthorized" });
     } else {
-      const userGroup = await UserGroup.destroy({
+      const userGroupMoodDelete = await UserGroupMood.destroy({
+        where: {
+          UserGroupId: group.users[0].id,
+        },
+      });
+
+      const userGroupDelete = await UserGroup.destroy({
         where: {
           GroupId: groupId,
         },
       });
 
-      const group = await Group.destroy({
+      const groupDelete = await Group.destroy({
         where: {
           id: groupId,
         },
       });
 
-      if (userGroup === null || !userGroup) {
-        return res.status(404).json({ message: "Group not found" });
-      } else {
-        return res
-          .status(200)
-          .json({ message: "Group deleted", group, userGroup });
-      }
+      return res.status(200).json({ message: "Group deleted" });
     }
   } catch (error) {
     console.error("Error deleting group:", error);
     return res.status(500).json({ error: "Failed to delete group" });
+  }
+}
+
+async function updateLocation(req, res) {
+  const { groupId } = req.params;
+  const userId = req.user;
+  const { lat, long } = req.body;
+  try {
+    UserGroup.findOne({
+      where: {
+        GroupId: groupId,
+        UserId: userId,
+      },
+    }).then((userGroup) => {
+      console.log(userGroup);
+      if (userGroup === null || !userGroup) {
+        return res.status(404).json({ message: "Group not found" });
+      } else {
+        UserGroup.update(
+          {
+            lat: lat,
+            long: long,
+          },
+          {
+            where: {
+              id: groupId,
+            },
+          }
+        ).then((group) => {
+          if (group === null || !group) {
+            return res.status(404).json({ message: "Group not found" });
+          } else {
+            return res.status(200).json({ message: "User location set" });
+          }
+        });
+      }
+    });
+  } catch (error) {
+    console.error("Error updating group location:", error);
+    return res.status(500).json({ error: "Failed to update group location" });
   }
 }
 
@@ -366,4 +448,5 @@ module.exports = {
   updateGroup,
   deleteMember,
   deleteGroup,
+  updateLocation,
 };

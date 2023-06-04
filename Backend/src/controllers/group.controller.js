@@ -80,6 +80,14 @@ async function deleteGroup(req, res) {
   }
 }
 
+async function updateLocation(req, res) {
+  try {
+    await group.updateLocation(req, res);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
 module.exports = {
   createGroup,
   joinGroup,
@@ -91,4 +99,5 @@ module.exports = {
   updateGroup,
   deleteMember,
   deleteGroup,
+  updateLocation,
 };
