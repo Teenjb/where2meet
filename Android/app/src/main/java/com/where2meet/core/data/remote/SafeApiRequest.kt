@@ -46,8 +46,12 @@ inline fun <T> wrapFlowApiCall(crossinline function: suspend () -> Result<T>): F
         }
     }
 
+private val json = Json {
+    ignoreUnknownKeys = true
+}
+
 fun decodeErrorApiResponse(str: String): String =
-    Json.decodeFromString(
+    json.decodeFromString(
         ApiResponse.serializer(StatusResponse.serializer()),
         str,
     ).message

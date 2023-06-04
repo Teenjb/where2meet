@@ -111,6 +111,9 @@
         <action
             android:id="@+id/action_to_detail"
             app:destination="@id/detailGroup" />
+        <argument
+            android:name="groupId"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/pickMood"
@@ -120,6 +123,9 @@
         <action
             android:id="@+id/action_to_pick_location"
             app:destination="@id/pickLocation" />
+        <argument
+            android:name="groupId"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/groupResult"

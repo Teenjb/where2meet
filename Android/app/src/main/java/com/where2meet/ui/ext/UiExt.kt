@@ -1,8 +1,12 @@
 package com.where2meet.ui.ext
 
+import android.content.Context
 import android.content.pm.PackageManager
+import android.util.TypedValue
 import android.view.View
 import android.widget.Toast
+import androidx.annotation.AttrRes
+import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -58,3 +62,13 @@ fun Fragment.checkPermission(permission: String): Boolean =
         requireActivity(),
         permission,
     ) == PackageManager.PERMISSION_GRANTED
+
+@ColorInt
+fun Context.getColorFromAttr(
+    @AttrRes attrColor: Int,
+    typedValue: TypedValue = TypedValue(),
+    resolveRefs: Boolean = true
+): Int {
+    theme.resolveAttribute(attrColor, typedValue, resolveRefs)
+    return typedValue.data
+}

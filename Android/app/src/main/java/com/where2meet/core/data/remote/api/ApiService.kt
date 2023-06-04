@@ -9,10 +9,7 @@ import com.where2meet.core.data.remote.json.auth.UserJson
 import com.where2meet.core.data.remote.json.group.GroupJson
 import com.where2meet.core.data.remote.json.group.GroupPagingJson
 import com.where2meet.core.data.remote.json.group.MoodJson
-import com.where2meet.core.data.remote.json.group.PositionJson
-import com.where2meet.core.data.remote.json.group.admin.CreateGroupResponse
-import com.where2meet.core.data.remote.json.group.admin.DeleteGroupBody
-import com.where2meet.core.data.remote.json.group.admin.DeleteMemberBody
+import com.where2meet.core.data.remote.json.group.member.UpdateLocationBody
 import com.where2meet.core.data.remote.json.group.admin.UpdateGroupBody
 import com.where2meet.core.data.remote.json.group.member.JoinGroupBody
 import com.where2meet.core.data.remote.json.group.member.UpdateMoodsBody
@@ -35,7 +32,7 @@ interface ApiService {
 
     @POST("login")
     suspend fun login(
-       @Body body: LoginBody,
+        @Body body: LoginBody,
     ): Response<ApiResponse<LoginResponse>>
 
     @GET("me")
@@ -44,41 +41,43 @@ interface ApiService {
     ): Response<ApiResponse<UserJson>>
 
     // group administration
-    @POST("createGroup")
+    @POST("groups")
     suspend fun createGroup(
         @Header("Authorization") token: String,
-    ): Response<ApiResponse<CreateGroupResponse>>
+    ): Response<ApiResponse<GroupJson>>
 
-    @PUT("updateGroup")
+    @PUT("groups/{groupId}")
     suspend fun updateGroup(
         @Header("Authorization") token: String,
+        @Path("groupId") groupId: Int,
         @Body body: UpdateGroupBody,
     ): Response<ApiResponse<GroupJson>>
 
-    @DELETE("deleteMember")
-    suspend fun deleteMember(
-        @Header("Authorization") token: String,
-        @Body body: DeleteMemberBody,
-    ): Response<ApiResponse<StatusResponse>>
-
-    @DELETE("deleteGroup")
+    @DELETE("groups/{groupId}")
     suspend fun deleteGroup(
         @Header("Authorization") token: String,
-        @Body body: DeleteGroupBody,
+        @Path("groupId") groupId: Int,
     ): Response<ApiResponse<StatusResponse>>
 
-    @POST("groups/recommendation/{groupId}")
+    @DELETE("groups/{groupId}/members/{userId}")
+    suspend fun deleteMember(
+        @Header("Authorization") token: String,
+        @Path("groupId") groupId: Int,
+        @Path("userId") userId: Int,
+    ): Response<ApiResponse<StatusResponse>>
+
+    @POST("groups/{groupId}/recommend")
     suspend fun generateRecommendation(
         @Header("Authorization") token: String,
         @Path("groupId") groupId: Int,
     ): Response<ApiResponse<GroupJson>>
 
     // group activity as member
-    @POST("joinGroup")
+    @POST("groups/join")
     suspend fun joinGroup(
         @Header("Authorization") token: String,
         @Body body: JoinGroupBody,
-    ): Response<ApiResponse<CreateGroupResponse>>
+    ): Response<ApiResponse<GroupJson>>
 
     @GET("groups")
     suspend fun fetchGroups(
@@ -94,14 +93,14 @@ interface ApiService {
         @Path("groupId") groupId: Int,
     ): Response<ApiResponse<GroupJson>>
 
-    @PUT("userGroup/location/{groupId}")
+    @PUT("groups/{groupId}/location")
     suspend fun updateLocationForGroup(
         @Header("Authorization") token: String,
         @Path("groupId") groupId: Int,
-        @Body body: PositionJson,
+        @Body body: UpdateLocationBody,
     ): Response<ApiResponse<StatusResponse>>
 
-    @PUT("userGroup/mood/{groupId}")
+    @PUT("groups/{groupId}/mood")
     suspend fun updateMoodsForGroup(
         @Header("Authorization") token: String,
         @Path("groupId") groupId: Int,

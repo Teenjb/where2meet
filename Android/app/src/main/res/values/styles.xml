@@ -11,4 +11,16 @@
         <item name="checkedIconEnabled">false</item>
         <item name="checkedIcon">@null</item>
     </style>
+
+    <style name="Widget.W2M.CardPending" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardBackgroundColor">?colorTertiaryContainer</item>
+        <item name="strokeColor">?colorTertiary</item>
+        <item name="shapeAppearanceOverlay">?shapeAppearanceSmallComponent</item>
+    </style>
+
+    <style name="Widget.W2M.CardDone" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardBackgroundColor">?colorPrimary</item>
+        <item name="strokeColor">?colorOutline</item>
+        <item name="shapeAppearanceOverlay">?shapeAppearanceSmallComponent</item>
+    </style>
 </resources>

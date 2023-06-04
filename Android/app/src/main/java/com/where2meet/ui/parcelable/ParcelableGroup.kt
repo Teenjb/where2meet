@@ -5,8 +5,9 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class ParcelableGroup(
-    val id: String,
+    val id: Int,
     val name: String,
+    val members: List<String>,
     val isAdmin: Boolean,
     val hasMood: Boolean,
     val hasLocation: Boolean,

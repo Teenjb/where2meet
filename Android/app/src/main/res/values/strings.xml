@@ -47,4 +47,6 @@
     <string name="dialog_location_permission_rejected_title">Location permission denied</string>
     <string name="err_location_not_found">Location not found</string>
     <string name="err_max_chip_selected">You can only select up to %d chips!</string>
+  <string name="lbl_done">Done</string>
+    <string name="lbl_pending">Pending</string>
 </resources>

@@ -4,6 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class UpdateGroupBody(
-    val groupId: Int,
     val name: String,
 )
