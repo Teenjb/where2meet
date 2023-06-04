@@ -131,7 +131,7 @@ paths:
                   data:
                     $ref: '#/components/schemas/group'
     get:
-      summary: Get Groups joined by a user
+      summary: Get Groups joined by a user ✅
       description: |
         Get Groups joined by a user \
         sorted by userGroup.createdAt (aka when the user joins a group) descending \
@@ -172,7 +172,13 @@ paths:
                   data:
                     type: object
                     properties:
-                      pageCount:
+                      totalPage:
+                        type: integer
+                        example: 1
+                      pageNumbert:
+                        type: integer
+                        example: 1
+                      pageSize:
                         type: integer
                         example: 1
                       groups:
@@ -272,7 +278,7 @@ paths:
                     example: Group deleted
   /groups/join:
     post:
-      summary: Join Group
+      summary: Join Group ✅
       tags:
         - Group Activity As Member
       requestBody:
@@ -418,7 +424,7 @@ paths:
                     example: Group not found
   /groups/{groupId}/mood:
     put:
-      summary: Set mood of a user on a group
+      summary: Set mood of a user on a group ✅
       tags:
         - Group Activity As Member
       parameters:
