@@ -39,10 +39,8 @@ async function updateMoods(req, res) {
 
     arrMoods.forEach((element) => {
       Mood.findOne({ where: { id: element } }).then(function (mood) {
-        console.log(mood);
         UserGroup.findOne({ where: { UserId: userId, GroupId: groupId } }).then(
           function (userGroup) {
-            console.log(userGroup);
             userGroup.addMood(mood);
           }
         );

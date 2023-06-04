@@ -13,7 +13,7 @@ const corsOptions = {
   optionsSuccessStatus: 200,
 };
 
-sequelize.sync({ alter: true }).then(() => {
+sequelize.sync({alter:true}).then(() => {
   console.log("################# DATABASE SYNCED #################");
 });
 

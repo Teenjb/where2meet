@@ -103,13 +103,25 @@ const Mood = sequelize.define("Mood", {
   modelName: "Mood",
 });
 
+const UserGroupMood = sequelize.define("UserGroupMood", {
+});
+
+//User and Group
 Group.hasMany(UserGroup, { as: "users" });
 UserGroup.belongsTo(Group);
 User.hasMany(UserGroup);
 UserGroup.belongsTo(User);
 Group.belongsToMany(User, { through: "UserGroup" });
 User.belongsToMany(Group, { through: "UserGroup" });
+
+//User Group and Mood
+UserGroup.hasMany(UserGroupMood);
+UserGroupMood.belongsTo(UserGroup);
+Mood.hasMany(UserGroupMood);
+UserGroupMood.belongsTo(Mood);
 UserGroup.belongsToMany(Mood, { through: "UserGroupMood", as: "moods" });
+Mood.belongsToMany(UserGroup, { through: "UserGroupMood" });
+
 
 module.exports = {
   User,
