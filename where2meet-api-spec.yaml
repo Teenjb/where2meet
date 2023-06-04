@@ -237,7 +237,7 @@ paths:
                   value:
                     message: Group doesn't exist
     put:
-      summary: Update Group
+      summary: Update Group ✅
       tags:
         - Group Administration
       requestBody:
@@ -262,7 +262,7 @@ paths:
                   data:
                     $ref: '#/components/schemas/group'
     delete:
-      summary: Delete Group
+      summary: Delete Group ✅
       tags:
         - Group Administration
       responses:
@@ -324,7 +324,7 @@ paths:
       in: path
       required: true
     delete:
-      summary: Delete Member
+      summary: Delete Member ✅
       tags:
         - Group Administration
       responses:
@@ -383,7 +383,7 @@ paths:
                       $ref: '#/components/schemas/mood'
   /groups/{groupId}/location:
     put:
-      summary: Set location of a user on a group
+      summary: Set location of a user on a group ✅
       tags:
         - Group Activity As Member
       parameters:
