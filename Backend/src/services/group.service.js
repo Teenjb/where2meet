@@ -130,9 +130,13 @@ async function getGroupByUserId(req, res) {
         through: {attributes: []}
       }],
       attributes: ["id", "name", "status"],
-      through: {attributes: []}, // TODO find how to remove UserGroup attribute
       limit: pageSize,
       offset: (pageNumber - 1) * pageSize,
+    });
+
+    // remove the UserGroup attribute
+    groups.filter((group) => {
+      delete group.dataValues.UserGroup;
     });
 
     if (groups === null || !groups) {

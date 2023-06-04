@@ -1,4 +1,4 @@
-const { User, Group, UserGroup, Mood } = require("../models/models.js");
+const { User, Group, UserGroup, Mood, UserGroupMood } = require("../models/models.js");
 
 async function createMood(req, res) {
   try {
@@ -37,12 +37,18 @@ async function updateMoods(req, res) {
     const { groupId } = req.params;
     var arrMoods = JSON.parse(moods);
 
+    console.log(arrMoods);
+
     arrMoods.forEach((element) => {
       Mood.findOne({ where: { id: element } }).then(function (mood) {
+        console.log(mood);
         UserGroup.findOne({ where: { UserId: userId, GroupId: groupId } }).then(
           function (userGroup) {
-            userGroup.addMood(mood);
-          }
+            console.log(userGroup);
+            UserGroupMood.create({
+              UserGroupId: userGroup.id,
+              MoodId: mood.id,
+          })}
         );
       });
     });
