@@ -176,7 +176,7 @@ async function getGroupByGroupId(req, res) {
     if (group === null || !group) {
       return res.status(404).json({ message: "Group not found" });
     } else {
-      return res.status(200).json({ message: "Group found", data: { group } });
+      return res.status(200).json({ message: "Group found", data: group });
     }
   } catch (error) {
     console.error("Error getting group:", error);
@@ -196,7 +196,7 @@ async function getGroupByCode(req, res) {
     if (group === null || !group || group === []) {
       return res.status(404).json({ message: "Group not found" });
     } else {
-      return res.status(200).json({ message: "Group found", data: { group } });
+      return res.status(200).json({ message: "Group found", data: group });
     }
   } catch (error) {
     console.error("Error getting group:", error);
