@@ -19,6 +19,7 @@ const {
   getMoods,
   updateMoods,
 } = require("../controllers/mood.controller");
+const { getRecommendation } = require("../controllers/recommender.controller");
 const verifyToken = require("../middlewares/jwt.middlewares");
 
 // Basic routes for auth
@@ -47,5 +48,8 @@ router.delete("/groups/:groupId", verifyToken, deleteGroup);
 router.post("/createMood", verifyToken, createMood);
 router.get("/moods", verifyToken, getMoods);
 router.put("/groups/:groupId/mood", verifyToken, updateMoods);
+
+// Routes for recommendation
+router.post("/groups/:groupId/recommend", verifyToken, getRecommendation);
 
 module.exports = router;

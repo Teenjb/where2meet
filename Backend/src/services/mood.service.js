@@ -37,14 +37,10 @@ async function updateMoods(req, res) {
     const { groupId } = req.params;
     var arrMoods = JSON.parse(moods);
 
-    console.log(arrMoods);
-
     arrMoods.forEach((element) => {
       Mood.findOne({ where: { id: element } }).then(function (mood) {
-        console.log(mood);
         UserGroup.findOne({ where: { UserId: userId, GroupId: groupId } }).then(
           function (userGroup) {
-            console.log(userGroup);
             UserGroupMood.create({
               UserGroupId: userGroup.id,
               MoodId: mood.id,
@@ -52,8 +48,6 @@ async function updateMoods(req, res) {
         );
       });
     });
-
-    console.log(UserGroup);
 
     res.status(200).json({ message: "Moods updated" });
   } catch (error) {

@@ -401,8 +401,6 @@ async function updateLocation(req, res) {
   const { groupId } = req.params;
   const userId = req.user;
   const { lat, long } = req.body;
-
-  console.log(groupId, userId, lat, long);
   
 
   try {
@@ -424,10 +422,10 @@ async function updateLocation(req, res) {
           {
             where: {
               GroupId: groupId,
+              UserId: userId,
             },
           }
         ).then((group) => {
-          console.log(group);
           if (group === null || !group) {
             return res.status(404).json({ message: "Group not found" });
           } else {
