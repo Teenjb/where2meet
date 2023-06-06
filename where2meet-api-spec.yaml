@@ -341,7 +341,7 @@ paths:
 
   /groups/{groupId}/recommend:
     post:
-      summary: Generate Recommendation for a Group
+      summary: Generate Recommendation for a Group ✅
       tags:
         - Group Administration
       parameters:
