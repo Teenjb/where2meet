@@ -56,7 +56,7 @@ const Group = sequelize.define(
       defaultValue: "Pending",
     },
     result: {
-      type: DataTypes.STRING,
+      type: DataTypes.ARRAY(DataTypes.JSON),
     },
     generatedAt: {
       type: DataTypes.DATE,

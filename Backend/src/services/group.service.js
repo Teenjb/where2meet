@@ -289,7 +289,6 @@ async function updateGroup(req, res) {
       return res.status(404).json({ message: "Group not found" });
     } else {
       const data = await getGroupDetail(groupId);
-      console.log(data);
       return res.status(200).json({ message: "Group updated", data });
     }
   } catch (error) {
@@ -318,8 +317,6 @@ async function deleteMember(req, res) {
         id: groupId,
       },
     });
-    console.log(JSON.stringify(group, null, 2));
-    //console.log(group.users[0].id);
 
     if (group === null || !group) {
       return res.status(404).json({ message: "Group not found" });
@@ -410,7 +407,6 @@ async function updateLocation(req, res) {
         UserId: userId,
       },
     }).then((userGroup) => {
-      console.log(JSON.stringify(userGroup, null, 2));
       if (userGroup === null || !userGroup) {
         return res.status(404).json({ message: "Group not found" });
       } else {

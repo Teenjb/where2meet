@@ -8,35 +8,40 @@ const {
 const { centerPoint } = require("../utils/recommender.util.js");
 const axios = require("axios");
 
+async function getGroupDetails(groupId) {
+  const group = await Group.findOne({
+    where: {
+      id: groupId,
+    },
+    include: [
+      {
+        model: UserGroup,
+        as: "users",
+        attributes: ["long", "lat"],
+        include: [
+          {
+            model: User,
+            attributes: ["id", "username"],
+          },
+          {
+            model: Mood,
+            as: "moods",
+            through: {
+              attributes: [],
+            },
+            attributes: ["id", "name", "displayText"],
+          },
+        ],
+      },
+    ],
+  });
+  return group;
+}
+
 async function getRecommendation(req, res) {
   const { groupId } = req.params;
   try {
-    const group = await Group.findOne({
-      where: {
-        id: groupId,
-      },
-      include: [
-        {
-          model: UserGroup,
-          as: "users",
-          attributes: ["long", "lat"],
-          include: [
-            {
-              model: User,
-              attributes: ["id", "username"],
-            },
-            {
-              model: Mood,
-              as: "moods",
-              through: {
-                attributes: [],
-              },
-              attributes: ["id", "name", "displayText"],
-            },
-          ],
-        },
-      ],
-    });
+    const group = await getGroupDetails(groupId);
     if (!group) {
       return res.status(404).json({ message: "Group not found" });
     }
@@ -63,35 +68,46 @@ async function getRecommendation(req, res) {
       }
     });
 
-    const center = centerPoint(locations);
+    const center = await centerPoint(locations);
 
-    console.log(locations);
-    console.log(centerPoint(locations));
-    console.log(moods);
-
-    const response = await axios.post('https://tes1-wtlln4sbra-uc.a.run.app', {
-        "latitude": center.x,
-        "longitude": center.y,
-        "keywords": moods
+    const response = await axios.post("https://tes1-wtlln4sbra-uc.a.run.app", {
+      latitude: center.x,
+      longitude: center.y,
+      keywords: moods,
     });
 
-    console.log(response.data);
-
     const mapping = await response.data.forEach(async (element) => {
-        mappedRepsonse.push({
-            rank: counter++,
-            locations: {
-                id: element.id,
-                name: element.Nama,
-                imageLink: null,
-                long: element.Lang,
-                lat: element.Lat,
-            }
-        })
-    })
+      mappedRepsonse.push({
+        rank: counter++,
+        locations: {
+          id: element.id,
+          name: element.Nama,
+          imageLink: null,
+          long: element.Lang,
+          lat: element.Lat,
+        },
+      });
+    });
 
-    res.status(200).json({ message: "Group recommendation generated", data: mappedRepsonse });
+    const updateGroup = await Group.update(
+      {
+        status: "Done",
+        generatedAt: new Date(),
+        result: mappedRepsonse,
+      },
+      {
+        where: {
+          id: groupId,
+        },
+        returning: true,
+      }
+    );
 
+    const result = await getGroupDetails(groupId);
+
+    res
+      .status(200)
+      .json({ message: "Group recommendation generated", data: result });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
