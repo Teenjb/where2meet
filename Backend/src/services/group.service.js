@@ -67,7 +67,7 @@ async function createGroup(req, res) {
 
     return res
       .status(201)
-      .json({ message: "Group created", data: { group: getGroup } });
+      .json({ message: "Group created", data: getGroup });
   } catch (error) {
     console.error("Error creating group:", error);
     return res.status(500).json({ error: "Failed to create group" });
