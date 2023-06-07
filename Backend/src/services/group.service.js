@@ -9,7 +9,7 @@ const { generateCode } = require("../utils/group.util.js");
 const { Op, Association } = require("sequelize");
 
 async function getGroupDetail(id) {
-  return await Group.findOne({
+  var result = await Group.findOne({
     where: {
       id: id,
     },
@@ -34,6 +34,31 @@ async function getGroupDetail(id) {
         ],
       },
     ],
+  });
+  const adminId = await result.adminId;
+  const users = await result.users;
+  const mappedUsers = [];
+  
+  return Promise.all(users.map( async (user) => {
+    if (user.User.id == adminId) {
+      mappedUsers.unshift(user);
+    }else{
+      mappedUsers.push(user);
+    }
+  })).then(() => {
+    const modifiedResult = {
+      id: result.id,
+      adminId: result.adminId,
+      name: result.name,
+      code: result.code,
+      status: result.status,
+      result: result.result,
+      generatedAt: result.generatedAt,
+      createdAt: result.createdAt,
+      updatedAt: result.updatedAt,
+      users: mappedUsers,
+    }
+    return modifiedResult;
   });
 }
 

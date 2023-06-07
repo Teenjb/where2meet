@@ -8,10 +8,10 @@ const {
 const { centerPoint } = require("../utils/recommender.util.js");
 const axios = require("axios");
 
-async function getGroupDetails(groupId) {
-  const group = await Group.findOne({
+async function getGroupDetail(id) {
+  var result = await Group.findOne({
     where: {
-      id: groupId,
+      id: id,
     },
     include: [
       {
@@ -35,7 +35,33 @@ async function getGroupDetails(groupId) {
       },
     ],
   });
-  return group;
+  const adminId = await result.adminId;
+  const users = await result.users;
+  const mappedUsers = [];
+
+  return Promise.all(
+    users.map(async (user) => {
+      if (user.User.id == adminId) {
+        mappedUsers.unshift(user);
+      } else {
+        mappedUsers.push(user);
+      }
+    })
+  ).then(() => {
+    const modifiedResult = {
+      id: result.id,
+      adminId: result.adminId,
+      name: result.name,
+      code: result.code,
+      status: result.status,
+      result: result.result,
+      generatedAt: result.generatedAt,
+      createdAt: result.createdAt,
+      updatedAt: result.updatedAt,
+      users: mappedUsers,
+    };
+    return modifiedResult;
+  });
 }
 
 async function getRecommendation(req, res) {
@@ -103,7 +129,7 @@ async function getRecommendation(req, res) {
       }
     );
 
-    const result = await getGroupDetails(groupId);
+    const result = await getGroupDetail(groupId);
 
     res
       .status(200)
