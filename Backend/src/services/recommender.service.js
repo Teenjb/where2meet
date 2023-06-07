@@ -67,7 +67,7 @@ async function getGroupDetail(id) {
 async function getRecommendation(req, res) {
   const { groupId } = req.params;
   try {
-    const group = await getGroupDetails(groupId);
+    const group = await getGroupDetail(groupId);
     if (!group) {
       return res.status(404).json({ message: "Group not found" });
     }
