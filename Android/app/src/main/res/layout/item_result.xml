@@ -20,10 +20,10 @@
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:scaleType="centerCrop"
+            android:src="@drawable/placeholder_cafe"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearanceOverlay="?shapeAppearanceSmallComponent"
-            tools:src="@tools:sample/backgrounds/scenic" />
+            app:shapeAppearanceOverlay="?shapeAppearanceSmallComponent" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -31,6 +31,7 @@
             android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
             android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/rank_card"
             app:layout_constraintStart_toEndOf="@id/iv_photo"
             app:layout_constraintTop_toTopOf="parent">
@@ -42,25 +43,25 @@
                 android:layout_marginEnd="8dp"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textAppearance="?textAppearanceTitleSmall"
-                app:layout_constraintEnd_toStartOf="@id/status_card"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                android:textAppearance="?textAppearanceTitleMedium"
                 tools:text="Cafe A" />
 
-            <TextView
-                android:id="@+id/tv_members"
-                android:layout_width="match_parent"
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="3"
-                android:textAppearance="?textAppearanceBodySmall"
-                app:layout_constraintEnd_toEndOf="@id/tv_name"
-                app:layout_constraintStart_toStartOf="@id/tv_name"
-                app:layout_constraintTop_toBottomOf="@id/tv_name"
-                tools:text="@tools:sample/lorem/random" />
+                app:cardBackgroundColor="?colorSurfaceContainer"
+                app:strokeColor="?colorOutline">
 
-
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="2dp"
+                    android:text="Open in Maps"
+                    android:textAppearance="?textAppearanceLabelSmall"
+                    android:textColor="?colorOnSurface" />
+            </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
 
         <com.google.android.material.card.MaterialCardView

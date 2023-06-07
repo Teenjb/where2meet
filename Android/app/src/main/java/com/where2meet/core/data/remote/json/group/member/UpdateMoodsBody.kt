@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class UpdateMoodsBody(
-    val moods: List<Int>
+    val moods: String
 )

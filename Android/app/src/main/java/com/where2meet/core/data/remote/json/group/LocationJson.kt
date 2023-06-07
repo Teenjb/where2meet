@@ -9,5 +9,5 @@ data class LocationJson(
     val name: String,
     val imgLink: String? = null,
     val lat: Double,
-    @SerialName("lang") val lng: Double,
+    @SerialName("long") val lng: Double,
 )

@@ -11,10 +11,10 @@ class OnboardingFragment : BaseFragment(R.layout.fragment_onboarding) {
     override fun bindView() {
         with(binding) {
             btnLogin.setOnClickListener {
-                navigateTo(OnboardingFragmentDirections.actionToLogin())
+                navigateTo(OnboardingFragmentDirections.actionOnboardingToLogin())
             }
             btnRegister.setOnClickListener {
-                navigateTo(OnboardingFragmentDirections.actionToRegister())
+                navigateTo(OnboardingFragmentDirections.actionOnboardingToRegister())
             }
         }
     }

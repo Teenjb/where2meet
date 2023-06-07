@@ -2,18 +2,17 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_main"
-    >
+    android:id="@+id/nav_main">
     <fragment
         android:id="@+id/onboarding"
         android:name="com.where2meet.ui.screen.onboarding.OnboardingFragment"
         android:label="Onboarding"
         tools:layout="@layout/fragment_onboarding">
         <action
-            android:id="@+id/action_to_login"
+            android:id="@+id/action_onboarding_to_login"
             app:destination="@id/login" />
         <action
-            android:id="@+id/action_to_register"
+            android:id="@+id/action_onboarding_to_register"
             app:destination="@id/register" />
     </fragment>
     <fragment
@@ -22,10 +21,10 @@
         android:label="Login"
         tools:layout="@layout/fragment_login">
         <action
-            android:id="@+id/action_to_register"
+            android:id="@+id/action_login_to_register"
             app:destination="@id/register" />
         <action
-            android:id="@+id/action_to_home"
+            android:id="@+id/action_login_to_home"
             app:destination="@id/home" />
     </fragment>
     <fragment
@@ -34,7 +33,7 @@
         android:label="Register"
         tools:layout="@layout/fragment_register">
         <action
-            android:id="@+id/action_to_login"
+            android:id="@+id/action_register_to_login"
             app:destination="@id/login"
             app:popUpTo="@id/onboarding" />
     </fragment>
@@ -44,25 +43,32 @@
         android:label="Home"
         tools:layout="@layout/fragment_home">
         <action
-            android:id="@+id/action_to_onboarding"
+            android:id="@+id/action_home_to_onboarding"
             app:destination="@id/onboarding"
             app:popUpTo="@id/nav_main"
             app:popUpToInclusive="true" />
         <action
-            android:id="@+id/action_to_detail"
+            android:id="@+id/action_home_to_detail"
             app:destination="@id/detailGroup" />
         <action
-            android:id="@+id/action_to_group_result"
+            android:id="@+id/action_home_to_group_result"
             app:destination="@id/groupResult" />
         <action
-            android:id="@+id/action_to_list_group"
+            android:id="@+id/action_home_to_list_group"
             app:destination="@id/listGroup" />
         <action
-            android:id="@+id/action_to_pick_mood"
+            android:id="@+id/action_home_to_pick_mood"
             app:destination="@id/pickMood" />
         <action
-            android:id="@+id/action_to_pick_location"
+            android:id="@+id/action_home_to_pick_location"
             app:destination="@id/pickLocation" />
+        <argument
+            android:name="invitationCode"
+            android:defaultValue=''
+            app:argType="string" />
+        <deepLink
+            app:uri="https://where2meet-backend-wtlln4sbra-et.a.run.app/w2m/invitations/{invitationCode}"
+            android:autoVerify="true"/>
     </fragment>
     <fragment
         android:id="@+id/listGroup"
@@ -70,16 +76,16 @@
         android:label="ListGroupFragment"
         tools:layout="@layout/fragment_list_group">
         <action
-            android:id="@+id/action_to_detail"
+            android:id="@+id/action_list_group_to_detail"
             app:destination="@id/detailGroup" />
         <action
-            android:id="@+id/action_to_group_result"
+            android:id="@+id/action_list_group_to_group_result"
             app:destination="@id/groupResult" />
         <action
-            android:id="@+id/action_to_pick_mood"
+            android:id="@+id/action_list_group_to_pick_mood"
             app:destination="@id/pickMood" />
         <action
-            android:id="@+id/action_to_pick_location"
+            android:id="@+id/action_list_group_to_pick_location"
             app:destination="@id/pickLocation" />
     </fragment>
     <fragment
@@ -88,11 +94,20 @@
         android:label="DetailGroupFragment"
         tools:layout="@layout/fragment_detail_group">
         <action
-            android:id="@+id/action_to_invite_member"
+            android:id="@+id/action_detail_to_invite_member"
             app:destination="@id/inviteMember" />
+        <action
+            android:id="@+id/action_detail_to_pick_mood"
+            app:destination="@id/pickMood" />
+        <action
+            android:id="@+id/action_detail_to_group_result"
+            app:destination="@id/groupResult" />
         <argument
             android:name="groupId"
             app:argType="integer" />
+        <argument
+            android:name="isAdmin"
+            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/inviteMember"
@@ -109,11 +124,16 @@
         android:label="PickLocationFragment"
         tools:layout="@layout/fragment_pick_location">
         <action
-            android:id="@+id/action_to_detail"
-            app:destination="@id/detailGroup" />
+            android:id="@+id/action_pick_location_to_detail"
+            app:destination="@id/detailGroup"
+            app:popUpTo="@id/pickMood"
+            app:popUpToInclusive="true" />
         <argument
             android:name="groupId"
             app:argType="integer" />
+        <argument
+            android:name="isAdmin"
+            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/pickMood"
@@ -121,11 +141,14 @@
         android:label="PickMoodFragment"
         tools:layout="@layout/fragment_pick_mood">
         <action
-            android:id="@+id/action_to_pick_location"
+            android:id="@+id/action_pick_mood_to_pick_location"
             app:destination="@id/pickLocation" />
         <argument
             android:name="groupId"
             app:argType="integer" />
+        <argument
+            android:name="isAdmin"
+            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/groupResult"

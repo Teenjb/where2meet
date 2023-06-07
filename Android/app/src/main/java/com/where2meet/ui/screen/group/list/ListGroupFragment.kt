@@ -1,5 +1,6 @@
 package com.where2meet.ui.screen.group.list
 
+import androidx.navigation.fragment.findNavController
 import com.where2meet.R
 import com.where2meet.databinding.FragmentListGroupBinding
 import com.where2meet.ui.base.BaseFragment
@@ -10,6 +11,7 @@ class ListGroupFragment : BaseFragment(R.layout.fragment_list_group) {
 
     override fun bindView() {
         with(binding) {
+            toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         }
     }
 }

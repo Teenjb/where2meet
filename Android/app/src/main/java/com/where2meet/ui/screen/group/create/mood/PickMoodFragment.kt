@@ -5,6 +5,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
 import com.where2meet.R
@@ -15,7 +16,9 @@ import com.where2meet.ui.ext.snackbar
 import com.where2meet.ui.ext.toast
 import com.where2meet.ui.ext.viewBinding
 import com.where2meet.ui.parcelable.MoodChipData
+import com.where2meet.ui.screen.group.create.CreateGroupEvent
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -25,11 +28,23 @@ import reactivecircus.flowbinding.android.view.clicks
 class PickMoodFragment : BaseFragment(R.layout.fragment_pick_mood) {
     private val binding by viewBinding<FragmentPickMoodBinding>()
     private val viewModel by viewModels<PickMoodViewModel>()
+    private val args: PickMoodFragmentArgs by navArgs()
     override fun onStart() {
         super.onStart()
         eventJob = viewModel.events
             .onEach { event ->
                 when (event) {
+                    is CreateGroupEvent.MoodsSubmitted -> {
+                        toggleLoading(false)
+                        toast(getString(R.string.msg_moods_selected))
+                        navigateTo(
+                            PickMoodFragmentDirections.actionPickMoodToPickLocation(
+                                args.groupId,
+                                args.isAdmin
+                            )
+                        )
+                    }
+
                     is Event.Loading -> {
                         toggleLoading(true)
                     }
@@ -54,23 +69,33 @@ class PickMoodFragment : BaseFragment(R.layout.fragment_pick_mood) {
         with(binding) {
             btnNext.clicks().onEach {
                 viewModel.submitMood()
-                // navigateTo(PickMoodFragmentDirections.actionToPickLocation())
             }.launchIn(lifecycleScope)
         }
 
         moodsObserver()
+        selectedMoodsObserver()
     }
 
     private fun moodsObserver() = lifecycleScope.launch {
         viewModel.moods
             .flowWithLifecycle(lifecycle)
+            .distinctUntilChanged()
             .collectLatest {
                 loadChips(it)
             }
     }
 
+    private fun selectedMoodsObserver() = lifecycleScope.launch {
+        viewModel.selectedMoods()
+            .flowWithLifecycle(lifecycle)
+            .collectLatest { list ->
+                if (list.isEmpty()) {
+                    binding.btnNext.isEnabled = false
+                }
+            }
+    }
+
     private fun toggleLoading(flag: Boolean) {
-        logcat { "toggleLoading($flag)" }
         binding.loadingBar.isVisible = flag
     }
 
@@ -105,6 +130,8 @@ class PickMoodFragment : BaseFragment(R.layout.fragment_pick_mood) {
                         } else {
                             viewModel.updateSelectedChip(moodChip, false)
                         }
+                        val updatedIds = viewModel.selectedMoods().value
+                        binding.btnNext.isEnabled = updatedIds.isNotEmpty()
                     }
                 }
             }

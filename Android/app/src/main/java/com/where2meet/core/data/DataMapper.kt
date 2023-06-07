@@ -32,7 +32,7 @@ fun GroupJson.toModel() = Group(
 
 fun ResultJson.toModel() = GroupResult(
     rank = this.rank,
-    location = this.location.toModel()
+    location = this.locations.toModel()
 )
 
 fun LocationJson.toModel() = Location(

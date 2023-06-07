@@ -25,6 +25,7 @@ import com.where2meet.core.domain.model.form.UpdateLocation
 import com.where2meet.core.domain.repository.GroupRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
+import logcat.logcat
 import javax.inject.Inject
 
 class GroupRepositoryImpl @Inject constructor(
@@ -125,7 +126,8 @@ class GroupRepositoryImpl @Inject constructor(
     override suspend fun updateMoods(groupId: Int, form: List<Mood>): Flow<Result<String>> =
         preference.token.flatMapLatest { token ->
             wrapFlowApiCall {
-                val body = UpdateMoodsBody(form.map { it.id })
+                val body = UpdateMoodsBody(form.map { it.id }.toString())
+                logcat { "updateMoods($groupId, $body)" }
                 val response = apiRequest { api.updateMoodsForGroup(token, groupId, body) }
                 Result.success(response.message)
             }

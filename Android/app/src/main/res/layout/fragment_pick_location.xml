@@ -1,80 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/lbl_title"
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/loading_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/lbl_pick_location_title"
-        android:textAppearance="?textAppearanceHeadlineMedium"
-        android:textColor="?colorSecondary"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:indeterminate="true"
+        android:visibility="invisible" />
 
-    <TextView
-        android:id="@+id/lbl_caption"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/lbl_pick_location_caption"
-        android:textAppearance="?textAppearanceLabelMedium"
-        app:layout_constraintTop_toBottomOf="@id/lbl_title" />
+        android:layout_height="match_parent">
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintBottom_toTopOf="@id/section_sheet"
-        app:layout_constraintTop_toBottomOf="@id/lbl_caption" />
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/section_sheet"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="-24dp"
-        android:elevation="12dp"
-        app:cardCornerRadius="24dp"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/lbl_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingHorizontal="16dp"
-            android:paddingTop="16dp"
-            android:paddingBottom="24dp">
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/lbl_pick_location_title"
+            android:textAppearance="?textAppearanceHeadlineMedium"
+            android:textColor="?colorSecondary"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_detect_location"
+        <TextView
+            android:id="@+id/lbl_caption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/lbl_pick_location_caption"
+            android:textAppearance="?textAppearanceLabelMedium"
+            app:layout_constraintTop_toBottomOf="@id/lbl_title" />
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintBottom_toTopOf="@id/section_sheet"
+            app:layout_constraintTop_toBottomOf="@id/lbl_caption" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/section_sheet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="-24dp"
+            android:elevation="12dp"
+            app:cardCornerRadius="24dp"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:text="@string/lbl_detect_location"
-                android:textAlignment="textStart"
-                android:textColor="?colorOnBackground"
-                app:backgroundTint="@android:color/transparent"
-                app:icon="@drawable/ic_crosshair"
-                app:iconPadding="12dp"
-                app:iconTint="?colorOnBackground"
-                app:shapeAppearanceOverlay="?shapeAppearanceSmallComponent"
-                app:strokeColor="?colorOutline"
-                app:strokeWidth="1dp" />
+                android:orientation="vertical"
+                android:paddingHorizontal="16dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="24dp">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_select_location"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:text="@string/lbl_select_location"
-                app:shapeAppearanceOverlay="?shapeAppearanceSmallComponent" />
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-</androidx.constraintlayout.widget.ConstraintLayout>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_detect_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="@string/lbl_detect_location"
+                    android:textAlignment="textStart"
+                    android:textColor="?colorOnBackground"
+                    app:backgroundTint="@android:color/transparent"
+                    app:icon="@drawable/ic_crosshair"
+                    app:iconPadding="12dp"
+                    app:iconTint="?colorOnBackground"
+                    app:shapeAppearanceOverlay="?shapeAppearanceSmallComponent"
+                    app:strokeColor="?colorOutline"
+                    app:strokeWidth="1dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_select_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:text="@string/lbl_select_location"
+                    app:shapeAppearanceOverlay="?shapeAppearanceSmallComponent" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

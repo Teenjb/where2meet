@@ -44,7 +44,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                         toast(
                             getString(R.string.msg_login_success),
                         )
-                        navigateTo(LoginFragmentDirections.actionToHome())
+                        navigateTo(LoginFragmentDirections.actionLoginToHome(""))
                     }
 
                     is Event.Loading -> {
@@ -74,7 +74,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                 val span = SpannableString(getString(R.string.lbl_register_now))
                 val clickableSpan = object : ClickableSpan() {
                     override fun onClick(widget: View) {
-                        navigateTo(LoginFragmentDirections.actionToRegister())
+                        navigateTo(LoginFragmentDirections.actionLoginToRegister())
                     }
 
                     override fun updateDrawState(ds: TextPaint) {

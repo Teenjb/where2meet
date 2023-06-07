@@ -1,5 +1,6 @@
 package com.where2meet.ui.screen.group.create.mood
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.where2meet.core.domain.model.Mood
 import com.where2meet.core.domain.repository.GroupRepository
@@ -7,6 +8,7 @@ import com.where2meet.ui.base.BaseViewModel
 import com.where2meet.ui.base.Event
 import com.where2meet.ui.parcelable.MoodChipData
 import com.where2meet.ui.parcelable.toChipData
+import com.where2meet.ui.screen.group.create.CreateGroupEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,13 +17,15 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import logcat.logcat
-import java.nio.file.Files.find
 import javax.inject.Inject
 
 @HiltViewModel
 class PickMoodViewModel @Inject constructor(
     private val group: GroupRepository,
+    handle: SavedStateHandle
 ) : BaseViewModel() {
+    private val groupId = handle.get<Int>("groupId") ?: -1
+
     private val mMoods = MutableStateFlow<List<MoodChipData>>(emptyList())
     val moods = mMoods.asStateFlow()
 
@@ -50,7 +54,7 @@ class PickMoodViewModel @Inject constructor(
     }
 
     fun updateSelectedChip(data: MoodChipData, checked: Boolean) {
-       mMoods.value.find { it.mood.id == data.mood.id }?.isSelected = checked
+        mMoods.value.find { it.mood.id == data.mood.id }?.isSelected = checked
     }
 
     fun submitMood() {
@@ -59,14 +63,14 @@ class PickMoodViewModel @Inject constructor(
             val selected = selectedMoods().value.map { it.mood }
             logcat { "submitMood() -> ${selected.map { it.name }}" }
             Event.Loading.send()
-            // group.updateMoods(-1, selected)
-            //     .catch { Event.Error(it).send() }
-            //     .collect { result ->
-            //         if (result.isSuccess) {
-            //             CreateGroupEvent.MoodsSubmitted.send()
-            //         } else if (result.isFailure)
-            //             Event.Error(result.exceptionOrNull()).send()
-            //     }
+            group.updateMoods(groupId, selected)
+                .catch { Event.Error(it).send() }
+                .collect { result ->
+                    if (result.isSuccess) {
+                        CreateGroupEvent.MoodsSubmitted.send()
+                    } else if (result.isFailure)
+                        Event.Error(result.exceptionOrNull()).send()
+                }
         }
     }
 }

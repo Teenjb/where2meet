@@ -3,6 +3,7 @@ package com.where2meet.ui.screen.home
 import androidx.lifecycle.viewModelScope
 import com.where2meet.core.data.toParcelable
 import com.where2meet.core.domain.model.MiniGroup
+import com.where2meet.core.domain.model.form.JoinGroup
 import com.where2meet.core.domain.repository.AuthRepository
 import com.where2meet.core.domain.repository.GroupRepository
 import com.where2meet.ui.base.BaseViewModel
@@ -21,6 +22,9 @@ class HomeViewModel @Inject constructor(
     private val group: GroupRepository,
 ) : BaseViewModel() {
     val session = auth.session()
+
+    private val mShowedInvitation = MutableStateFlow(false)
+    val showedInvitation = mShowedInvitation.asStateFlow()
 
     private val mGroups = MutableStateFlow(emptyList<MiniGroup>())
     val groups = mGroups.asStateFlow()
@@ -63,6 +67,28 @@ class HomeViewModel @Inject constructor(
                     } else if (result.isFailure)
                         Event.Error(result.exceptionOrNull()).send()
                 }
+        }
+    }
+
+    fun acceptInvitation(code: String) {
+        val form = JoinGroup(code)
+        apiJob?.cancel()
+        apiJob = viewModelScope.launch {
+            Event.Loading.send()
+            group.joinGroup(form)
+                .catch { Event.Error(it).send() }
+                .collect { result ->
+                    if (result.isSuccess) {
+                        HomeEvent.GroupJoined(result.getOrThrow().id).send()
+                    } else if (result.isFailure)
+                        Event.Error(result.exceptionOrNull()).send()
+                }
+        }
+    }
+
+    fun onShowedInvitation() {
+        viewModelScope.launch {
+            mShowedInvitation.value = true
         }
     }
 

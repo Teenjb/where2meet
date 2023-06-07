@@ -6,8 +6,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class UserGroupJson(
-    val user: UserJson,
+    @SerialName("User") val user: UserJson,
     val moods: List<MoodJson>,
-    @SerialName("lang") val lng: Double? = null,
     val lat: Double? = null,
+    @SerialName("long") val lng: Double? = null,
 )

@@ -47,6 +47,16 @@
     <string name="dialog_location_permission_rejected_title">Location permission denied</string>
     <string name="err_location_not_found">Location not found</string>
     <string name="err_max_chip_selected">You can only select up to %d chips!</string>
-  <string name="lbl_done">Done</string>
+    <string name="lbl_done">Done</string>
     <string name="lbl_pending">Pending</string>
+    <string name="msg_moods_selected">Moods selected</string>
+    <string name="msg_location_selected">Location selected</string>
+    <string name="lbl_group_created_at">Created by %1$s on %2$s</string>
+    <string name="lbl_current_mood">Current mood :  %s</string>
+    <string name="url_invitation">https://where2meet-backend-wtlln4sbra-et.a.run.app/w2m/invitations/%s</string>
+    <string name="lbl_group_generated_at">Generated at %s</string>
+    <string name="lbl_accept_invitation">Accept Invitation</string>
+    <string name="lbl_invite_confirmation_desc">You have been invited to join a group via invitation link. Do you wish to accept this invitation?</string>
+    <string name="lbl_accept">Accept</string>
+    <string name="lbl_reject">Reject</string>
 </resources>

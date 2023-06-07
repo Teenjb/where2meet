@@ -52,7 +52,7 @@ fun toggleAppTheme(value: String) {
     )
 }
 
-fun formatDateString(dateString: String, pattern: String): String =
+fun formatIsoDateString(dateString: String, pattern: String): String =
     DateTimeFormatter.ofPattern(pattern, Locale.getDefault()).format(
         LocalDateTime.parse(dateString, DateTimeFormatter.ISO_DATE_TIME),
     )
@@ -72,3 +72,12 @@ fun Context.getColorFromAttr(
     theme.resolveAttribute(attrColor, typedValue, resolveRefs)
     return typedValue.data
 }
+
+fun Int.getOrdinal(): String {
+    val suffixes = listOf("th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th")
+    return when (this % 100) {
+        11, 12, 13 -> "${this}th"
+        else -> "$this${suffixes[this % 10]}"
+    }
+}
+

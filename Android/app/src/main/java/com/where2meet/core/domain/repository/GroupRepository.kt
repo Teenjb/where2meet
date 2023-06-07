@@ -25,6 +25,5 @@ interface GroupRepository {
     suspend fun fetchGroup(groupId: Int): Flow<Result<Group>>
     suspend fun updateLocation(groupId: Int, form: UpdateLocation): Flow<Result<String>>
     suspend fun updateMoods(groupId: Int, form: List<Mood>): Flow<Result<String>>
-
     suspend fun fetchMoods(): Flow<Result<List<Mood>>>
 }

@@ -54,7 +54,7 @@
             android:id="@+id/card_cta"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:backgroundTint="?colorPrimaryContainer"
+            app:cardBackgroundColor="?colorPrimaryContainer"
             android:clickable="true"
             android:focusable="true"
             android:padding=".5dp"
