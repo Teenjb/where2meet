@@ -8,5 +8,5 @@ data class GroupPagingJson(
     val totalPage: Int,
     val pageNumber: Int,
     val pageSize: Int,
-    @SerialName("Groups") val groups: List<MiniGroupJson>
+    @SerialName("Groups") val groups: List<MiniGroupJson>,
 )

@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class MoodJson(
     val id: Int,
     val name: String,
-    val displayText: String
+    val displayText: String,
 )

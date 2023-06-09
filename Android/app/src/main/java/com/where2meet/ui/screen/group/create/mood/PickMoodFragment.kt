@@ -40,8 +40,8 @@ class PickMoodFragment : BaseFragment(R.layout.fragment_pick_mood) {
                         navigateTo(
                             PickMoodFragmentDirections.actionPickMoodToPickLocation(
                                 args.groupId,
-                                args.isAdmin
-                            )
+                                args.isAdmin,
+                            ),
                         )
                     }
 
@@ -111,8 +111,8 @@ class PickMoodFragment : BaseFragment(R.layout.fragment_pick_mood) {
                         binding.root.context,
                         null,
                         0,
-                        R.style.Widget_W2M_MoodChip
-                    )
+                        R.style.Widget_W2M_MoodChip,
+                    ),
                 )
                 isChecked = moodChip.isSelected
                 setOnCheckedChangeListener { _, checked ->

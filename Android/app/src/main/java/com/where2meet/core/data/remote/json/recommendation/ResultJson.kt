@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ResultJson(
     val rank: Int,
-    val locations: LocationJson
+    val locations: LocationJson,
 )

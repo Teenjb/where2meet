@@ -1,20 +1,31 @@
 package com.where2meet.ui.screen.onboarding
 
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import com.where2meet.R
-import com.where2meet.databinding.FragmentOnboardingBinding
+import com.where2meet.databinding.FragmentOnBoardingBinding
 import com.where2meet.ui.base.BaseFragment
 import com.where2meet.ui.ext.viewBinding
 
-class OnboardingFragment : BaseFragment(R.layout.fragment_onboarding) {
-    private val binding by viewBinding<FragmentOnboardingBinding>()
+class OnBoardingFragment : BaseFragment(R.layout.fragment_on_boarding) {
+    private val binding by viewBinding<FragmentOnBoardingBinding>()
 
     override fun bindView() {
+        val navigatorExtras = FragmentNavigatorExtras(
+            binding.hero to "hero",
+            binding.ivLogo to "logo",
+        )
         with(binding) {
             btnLogin.setOnClickListener {
-                navigateTo(OnboardingFragmentDirections.actionOnboardingToLogin())
+                navigateTo(
+                    OnBoardingFragmentDirections.actionOnboardingToLogin(),
+                    navigatorExtras,
+                )
             }
             btnRegister.setOnClickListener {
-                navigateTo(OnboardingFragmentDirections.actionOnboardingToRegister())
+                navigateTo(
+                    OnBoardingFragmentDirections.actionOnboardingToRegister(),
+                    navigatorExtras,
+                )
             }
         }
     }

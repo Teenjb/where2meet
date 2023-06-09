@@ -37,8 +37,10 @@ class UserGroupAdapter(
                 } else {
                     data.user.username
                 }
-                tvMoods.text = ctx.getString(R.string.lbl_current_mood,
-                    data.moods.joinToString(", ") { it.name.replaceFirstChar { char -> char.uppercase() } })
+                tvMoods.text = ctx.getString(
+                    R.string.lbl_current_mood,
+                    data.moods.joinToString(", ") { it.name.replaceFirstChar { char -> char.uppercase() } },
+                )
                 ivAvatar.apply {
                     val imgData = ImageRequest.Builder(this.context)
                         .data("https://ui-avatars.com/api/?name=${data.user.username}&length=1")
@@ -50,13 +52,15 @@ class UserGroupAdapter(
                     if (isOwner) {
                         cardCta.setOnClickListener { onEdit(data) }
                     } else {
-                        cardCta.setCardBackgroundColor(ctx.getColorFromAttr(com.google.android.material.R.attr.colorError))
+                        cardCta.setCardBackgroundColor(
+                            ctx.getColorFromAttr(com.google.android.material.R.attr.colorError),
+                        )
                         ivCta.setColorFilter(
                             ctx.getColorFromAttr(com.google.android.material.R.attr.colorOnError),
-                            PorterDuff.Mode.SRC_IN
+                            PorterDuff.Mode.SRC_IN,
                         )
                         ivCta.setImageDrawable(
-                            AppCompatResources.getDrawable(ctx, R.drawable.ic_delete)
+                            AppCompatResources.getDrawable(ctx, R.drawable.ic_delete),
                         )
                         cardCta.setOnClickListener { onDelete(data) }
                     }

@@ -9,9 +9,9 @@ import com.where2meet.core.data.remote.json.auth.UserJson
 import com.where2meet.core.data.remote.json.group.GroupJson
 import com.where2meet.core.data.remote.json.group.GroupPagingJson
 import com.where2meet.core.data.remote.json.group.MoodJson
-import com.where2meet.core.data.remote.json.group.member.UpdateLocationBody
 import com.where2meet.core.data.remote.json.group.admin.UpdateGroupBody
 import com.where2meet.core.data.remote.json.group.member.JoinGroupBody
+import com.where2meet.core.data.remote.json.group.member.UpdateLocationBody
 import com.where2meet.core.data.remote.json.group.member.UpdateMoodsBody
 import retrofit2.Response
 import retrofit2.http.Body

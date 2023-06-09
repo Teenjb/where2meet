@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.where2meet.core.data.preference.DataStoreManager
 import com.where2meet.core.domain.model.Group
 import com.where2meet.core.domain.model.form.DeleteMember
+import com.where2meet.core.domain.model.form.UpdateGroup
 import com.where2meet.core.domain.repository.GroupRepository
 import com.where2meet.ui.base.BaseViewModel
 import com.where2meet.ui.base.Event
@@ -22,7 +23,7 @@ import javax.inject.Inject
 class DetailGroupViewModel @Inject constructor(
     private val group: GroupRepository,
     preference: DataStoreManager,
-    handle: SavedStateHandle
+    handle: SavedStateHandle,
 ) : BaseViewModel() {
     private val groupId = handle.get<Int>("groupId") ?: -1
 
@@ -49,8 +50,9 @@ class DetailGroupViewModel @Inject constructor(
                     if (result.isSuccess) {
                         mDetail.emit(result.getOrThrow())
                         Event.NotLoading.send()
-                    } else if (result.isFailure)
+                    } else if (result.isFailure) {
                         Event.Error(result.exceptionOrNull()).send()
+                    }
                 }
         }
     }
@@ -64,8 +66,9 @@ class DetailGroupViewModel @Inject constructor(
                 .collect { result ->
                     if (result.isSuccess) {
                         GroupEvent.GroupDeleted.send()
-                    } else if (result.isFailure)
+                    } else if (result.isFailure) {
                         Event.Error(result.exceptionOrNull()).send()
+                    }
                 }
         }
     }
@@ -80,8 +83,26 @@ class DetailGroupViewModel @Inject constructor(
                 .collect { result ->
                     if (result.isSuccess) {
                         GroupEvent.MemberRemoved.send()
-                    } else if (result.isFailure)
+                    } else if (result.isFailure) {
                         Event.Error(result.exceptionOrNull()).send()
+                    }
+                }
+        }
+    }
+
+    fun onUpdateGroup(name: String) {
+        val form = UpdateGroup(groupId, name)
+        apiJob?.cancel()
+        apiJob = viewModelScope.launch {
+            Event.Loading.send()
+            group.updateGroup(form)
+                .catch { Event.Error(it).send() }
+                .collect { result ->
+                    if (result.isSuccess) {
+                        GroupEvent.GroupUpdated.send()
+                    } else if (result.isFailure) {
+                        Event.Error(result.exceptionOrNull()).send()
+                    }
                 }
         }
     }
@@ -95,8 +116,9 @@ class DetailGroupViewModel @Inject constructor(
                 .collect { result ->
                     if (result.isSuccess) {
                         GroupEvent.RecommendationGenerated(result.getOrThrow().id).send()
-                    } else if (result.isFailure)
+                    } else if (result.isFailure) {
                         Event.Error(result.exceptionOrNull()).send()
+                    }
                 }
         }
     }

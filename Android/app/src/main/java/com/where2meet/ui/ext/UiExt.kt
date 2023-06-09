@@ -67,12 +67,13 @@ fun Fragment.checkPermission(permission: String): Boolean =
 fun Context.getColorFromAttr(
     @AttrRes attrColor: Int,
     typedValue: TypedValue = TypedValue(),
-    resolveRefs: Boolean = true
+    resolveRefs: Boolean = true,
 ): Int {
     theme.resolveAttribute(attrColor, typedValue, resolveRefs)
     return typedValue.data
 }
 
+@Suppress("MagicNumber")
 fun Int.getOrdinal(): String {
     val suffixes = listOf("th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th")
     return when (this % 100) {
@@ -80,4 +81,3 @@ fun Int.getOrdinal(): String {
         else -> "$this${suffixes[this % 10]}"
     }
 }
-

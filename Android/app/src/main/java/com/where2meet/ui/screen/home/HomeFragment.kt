@@ -1,12 +1,13 @@
 package com.where2meet.ui.screen.home
 
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.request.ImageRequest
-import coil.transform.RoundedCornersTransformation
 import com.afollestad.materialdialogs.MaterialDialog
 import com.where2meet.R
 import com.where2meet.databinding.FragmentHomeBinding
@@ -41,8 +42,8 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                         navigateTo(
                             HomeFragmentDirections.actionHomeToPickMood(
                                 event.groupId,
-                                true
-                            )
+                                true,
+                            ),
                         )
                     }
 
@@ -52,8 +53,8 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                         navigateTo(
                             HomeFragmentDirections.actionHomeToPickMood(
                                 event.groupId,
-                                false
-                            )
+                                false,
+                            ),
                         )
                     }
 
@@ -65,26 +66,26 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                             navigateTo(
                                 HomeFragmentDirections.actionHomeToPickMood(
                                     group.id,
-                                    group.isAdmin
-                                )
+                                    group.isAdmin,
+                                ),
                             )
                         } else if (!group.hasLocation) {
                             navigateTo(
                                 HomeFragmentDirections.actionHomeToPickLocation(
                                     group.id,
-                                    group.isAdmin
-                                )
+                                    group.isAdmin,
+                                ),
                             )
                         } else if (!group.hasResult) {
                             navigateTo(
                                 HomeFragmentDirections.actionHomeToDetail(
                                     group.id,
-                                    group.isAdmin
-                                )
+                                    group.isAdmin,
+                                ),
                             )
                         } else {
                             navigateTo(
-                                HomeFragmentDirections.actionHomeToGroupResult(group.id)
+                                HomeFragmentDirections.actionHomeToGroupResult(group.id),
                             )
                         }
                     }
@@ -102,7 +103,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                         logcat { "Error : ${event.throwable?.message}" }
                         snackbar(
                             "Error : ${event.throwable?.message}",
-                            binding.bottomAppBar
+                            binding.bottomAppBar,
                         )
                     }
                 }
@@ -161,7 +162,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
     }
 
     private fun observeSession() = lifecycleScope.launch {
-        viewModel.session.collectLatest { session ->
+        viewModel.session.flowWithLifecycle(lifecycle).collectLatest { session ->
             if (session.token.isBlank()) {
                 navigateTo(HomeFragmentDirections.actionHomeToOnboarding())
             }
@@ -171,7 +172,6 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                     val imgData = ImageRequest.Builder(this.context)
                         .data("https://ui-avatars.com/api/?name=${session.username}&length=1")
                         .target(this)
-                        .transformations(RoundedCornersTransformation(16f))
                         .allowHardware(true)
                         .build()
                     imageLoader.enqueue(imgData)
@@ -181,8 +181,18 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
     }
 
     private fun observeGroups() = lifecycleScope.launch {
-        viewModel.groups.collectLatest { groups ->
-            groupAdapter.submitList(groups)
+        viewModel.groups.flowWithLifecycle(lifecycle).collectLatest { groups ->
+            if (groups.isEmpty()) {
+                modifyErrorLayout(
+                    "No results found",
+                    "We didn't find anything from your search query",
+                    "🗑️",
+                )
+                toggleErrorLayout(true)
+            } else {
+                toggleErrorLayout(false)
+                groupAdapter.submitList(groups)
+            }
         }
     }
 
@@ -207,6 +217,22 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                 viewModel.acceptInvitation(args.invitationCode)
             }
             negativeButton(R.string.lbl_reject)
+        }
+    }
+
+    private fun modifyErrorLayout(title: String, message: String, emoji: String) {
+        with(binding.home.error) {
+            tvTitle.text = title
+            tvMessage.text = message
+            tvEmoji.text = emoji
+        }
+    }
+
+    private fun toggleErrorLayout(flag: Boolean) {
+        with(binding.home) {
+            error.root.isVisible = flag
+            content.lblSeeMore.isVisible = !flag
+            content.rvHome.isVisible = !flag
         }
     }
 }

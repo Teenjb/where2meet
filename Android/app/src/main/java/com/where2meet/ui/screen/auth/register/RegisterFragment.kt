@@ -6,6 +6,7 @@ import android.text.Spanned
 import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
+import android.transition.TransitionInflater
 import android.util.Patterns
 import android.view.View
 import androidx.core.view.isVisible
@@ -67,6 +68,9 @@ class RegisterFragment : BaseFragment(R.layout.fragment_register) {
     }
 
     override fun bindView() {
+        sharedElementEnterTransition =
+            TransitionInflater.from(requireContext()).inflateTransition(android.R.transition.move)
+
         with(binding) {
             btnRegister.clicks().onEach {
                 submit()
@@ -87,7 +91,7 @@ class RegisterFragment : BaseFragment(R.layout.fragment_register) {
                 span.setSpan(
                     clickableSpan,
                     span.indexOf('?') + 2,
-                    span.lastIndex,
+                    span.lastIndex + 1,
                     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
                 )
                 text = span
@@ -141,7 +145,7 @@ class RegisterFragment : BaseFragment(R.layout.fragment_register) {
                         getString(R.string.lbl_username),
                     )
 
-                    !Regexes.usernameRegex.matches(value) -> getString(R.string.validation_username)
+                    !Regexes.USERNAME_REGEX.matches(value) -> getString(R.string.validation_username)
 
                     else -> null
                 }
@@ -182,7 +186,7 @@ class RegisterFragment : BaseFragment(R.layout.fragment_register) {
                         getString(R.string.lbl_password),
                     )
 
-                    !Regexes.passwordRegex.matches(value) -> getString(R.string.validation_password)
+                    !Regexes.PASSWORD_REGEX.matches(value) -> getString(R.string.validation_password)
 
                     else -> null
                 }

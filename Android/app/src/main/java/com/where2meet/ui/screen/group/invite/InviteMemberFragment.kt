@@ -27,7 +27,9 @@ class InviteMemberFragment : BaseFragment(R.layout.fragment_invite_member) {
 
             val url = getString(R.string.url_invitation, args.groupCode)
             edInviteLink.setText(args.groupCode)
-            edInviteLink.setTextColor(requireContext().getColorFromAttr(com.google.android.material.R.attr.colorOnSurface))
+            edInviteLink.setTextColor(
+                requireContext().getColorFromAttr(com.google.android.material.R.attr.colorOnSurface),
+            )
 
             btnCopy.clicks().onEach {
                 onCopyLink(url)

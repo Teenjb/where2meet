@@ -11,17 +11,17 @@ import com.where2meet.core.domain.model.form.UpdateLocation
 import kotlinx.coroutines.flow.Flow
 
 interface GroupRepository {
-    //admin
+    // admin
     suspend fun createGroup(): Flow<Result<Group>>
     suspend fun updateGroup(form: UpdateGroup): Flow<Result<Group>>
     suspend fun deleteMember(form: DeleteMember): Flow<Result<String>>
     suspend fun deleteGroup(groupId: Int): Flow<Result<String>>
     suspend fun generateRecommendation(groupId: Int): Flow<Result<Group>>
 
-    //member
+    // member
     suspend fun joinGroup(form: JoinGroup): Flow<Result<Group>>
     suspend fun fetchGroups(size: Int): Flow<Result<List<MiniGroup>>>
-    suspend fun fetchPagedGroups(): Flow<PagingData<MiniGroup>>
+    suspend fun fetchPagedGroups(query: String): Flow<PagingData<MiniGroup>>
     suspend fun fetchGroup(groupId: Int): Flow<Result<Group>>
     suspend fun updateLocation(groupId: Int, form: UpdateLocation): Flow<Result<String>>
     suspend fun updateMoods(groupId: Int, form: List<Mood>): Flow<Result<String>>

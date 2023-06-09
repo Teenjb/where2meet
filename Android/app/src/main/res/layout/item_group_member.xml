@@ -54,10 +54,10 @@
             android:id="@+id/card_cta"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            app:cardBackgroundColor="?colorPrimaryContainer"
             android:clickable="true"
             android:focusable="true"
             android:padding=".5dp"
+            app:cardBackgroundColor="?colorPrimaryContainer"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full">

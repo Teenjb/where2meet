@@ -1,18 +1,18 @@
 package com.where2meet.ui.adapter
 
 import android.view.ViewGroup
-import androidx.recyclerview.widget.ListAdapter
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.where2meet.R
 import com.where2meet.core.domain.model.MiniGroup
 import com.where2meet.databinding.ItemGroupHangoutBinding
-import com.where2meet.ui.adapter.GroupAdapter.GroupViewHolder
+import com.where2meet.ui.adapter.GroupPagingAdapter.GroupViewHolder
 import com.where2meet.ui.ext.getColorFromAttr
 import com.where2meet.ui.ext.viewBinding
 
-class GroupAdapter(
+class GroupPagingAdapter(
     private val onClick: (MiniGroup) -> Unit,
-) : ListAdapter<MiniGroup, GroupViewHolder>(MINI_GROUP_COMPARATOR) {
+) : PagingDataAdapter<MiniGroup, GroupViewHolder>(MINI_GROUP_COMPARATOR) {
     inner class GroupViewHolder(private val binding: ItemGroupHangoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: MiniGroup?) {

@@ -41,10 +41,10 @@
                 android:id="@+id/ed_invite_link"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:enabled="false"
-                android:maxLines="1"
-                android:inputType="text"
                 android:ellipsize="end"
+                android:enabled="false"
+                android:inputType="text"
+                android:maxLines="1"
                 android:singleLine="true"
                 android:textAppearance="?textAppearanceLabelMedium"
                 tools:text="where2meet.id/invitations/code-here" />

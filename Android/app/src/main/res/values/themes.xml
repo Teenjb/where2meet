@@ -57,5 +57,11 @@
         <item name="textAppearanceLabelLarge">@style/TextAppearance.W2M.LabelLarge</item>
         <item name="textAppearanceLabelMedium">@style/TextAppearance.W2M.LabelMedium</item>
         <item name="textAppearanceLabelSmall">@style/TextAppearance.W2M.LabelSmall</item>
+
+        <!--        material dialogs-->
+        <item name="md_corner_radius">12dp</item>
+        <item name="md_font_title">@font/nunito</item>
+        <item name="md_font_body">@font/nunito</item>
+        <item name="md_font_button">@font/nunito</item>
     </style>
 </resources>

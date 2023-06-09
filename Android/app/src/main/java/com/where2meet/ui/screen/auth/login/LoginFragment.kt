@@ -6,6 +6,7 @@ import android.text.Spanned
 import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
+import android.transition.TransitionInflater
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -65,6 +66,9 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
     }
 
     override fun bindView() {
+        sharedElementEnterTransition =
+            TransitionInflater.from(requireContext()).inflateTransition(android.R.transition.move)
+
         with(binding) {
             btnLogin.clicks().onEach {
                 submit()
@@ -85,7 +89,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                 span.setSpan(
                     clickableSpan,
                     span.indexOf('?') + 2,
-                    span.lastIndex,
+                    span.lastIndex + 1,
                     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
                 )
                 text = span

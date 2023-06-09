@@ -1,13 +1,16 @@
 package com.where2meet.ui.screen.group.detail
 
+import android.annotation.SuppressLint
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.input.input
 import com.where2meet.R
 import com.where2meet.core.domain.model.Group
 import com.where2meet.core.domain.model.User
@@ -41,6 +44,11 @@ class DetailGroupFragment : BaseFragment(R.layout.fragment_detail_group) {
         eventJob = viewModel.events
             .onEach { event ->
                 when (event) {
+                    is GroupEvent.GroupUpdated -> {
+                        toast("Group updated!")
+                        viewModel.fetchDetail()
+                    }
+
                     is GroupEvent.GroupDeleted -> {
                         toast("Group deleted!")
                         findNavController().popBackStack()
@@ -91,10 +99,12 @@ class DetailGroupFragment : BaseFragment(R.layout.fragment_detail_group) {
     }
 
     private fun detailObserver() = lifecycleScope.launch {
-        viewModel.detail.collectLatest {
-            if (it == null) return@collectLatest
-            showDetail(it)
-        }
+        viewModel.detail
+            .flowWithLifecycle(lifecycle)
+            .collectLatest {
+                if (it == null) return@collectLatest
+                showDetail(it)
+            }
     }
 
     private fun showDetail(data: Group) {
@@ -104,12 +114,16 @@ class DetailGroupFragment : BaseFragment(R.layout.fragment_detail_group) {
             tvCreatedAt.text = getString(
                 R.string.lbl_group_created_at,
                 owner.username,
-                formatIsoDateString(data.createdAt, "MMMM dd, yyyy")
+                formatIsoDateString(data.createdAt, "MMMM dd, yyyy"),
             )
 
             btnInvite.isEnabled = true
             btnInvite.clicks().onEach {
                 navigateTo(DetailGroupFragmentDirections.actionDetailToInviteMember(data.code))
+            }.launchIn(lifecycleScope)
+
+            ivEdit.clicks().onEach {
+                showUpdateGroupDialog()
             }.launchIn(lifecycleScope)
 
             btnGenerate.clicks().onEach {
@@ -161,12 +175,13 @@ class DetailGroupFragment : BaseFragment(R.layout.fragment_detail_group) {
                 navigateTo(
                     DetailGroupFragmentDirections.actionDetailToPickMood(
                         args.groupId,
-                        args.isAdmin
-                    )
+                        args.isAdmin,
+                    ),
                 )
-            }, { userGroup ->
+            },
+            { userGroup ->
                 showDeleteMemberDialog(userGroup.user)
-            }
+            },
         )
         view.adapter = memberAdapter
         view.layoutManager = LinearLayoutManager(requireContext())
@@ -174,34 +189,46 @@ class DetailGroupFragment : BaseFragment(R.layout.fragment_detail_group) {
 
     private fun showDeleteGroupDialog() {
         MaterialDialog(requireContext()).show {
-            title(text = "Delete Confirmation")
-            message(text = "Are you sure you want to delete this group?")
-            positiveButton(text = "Yes") {
+            title(R.string.dialog_delete_confirmation_title)
+            message(R.string.dialog_delete_group_message)
+            positiveButton(R.string.dialog_btn_yes) {
                 viewModel.onDeleteGroup()
             }
-            negativeButton(text = "No") { }
+            negativeButton(R.string.dialog_btn_no)
         }
     }
 
     private fun showDeleteMemberDialog(user: User) {
         MaterialDialog(requireContext()).show {
-            title(text = "Delete Confirmation")
-            message(text = "Are you sure you want to remove ${user.username} from this group?")
-            positiveButton(text = "Yes") {
+            title(R.string.dialog_delete_confirmation_title)
+            message(R.string.dialog_delete_member_message, user.username)
+            positiveButton(R.string.dialog_btn_yes) {
                 viewModel.onDeleteGroupMember(user.id)
             }
-            negativeButton(text = "No") { }
+            negativeButton(R.string.dialog_btn_no)
+        }
+    }
+
+    @SuppressLint("CheckResult")
+    private fun showUpdateGroupDialog() {
+        MaterialDialog(requireContext()).show {
+            title(R.string.dialog_update_group_title)
+            input { _, text ->
+                viewModel.onUpdateGroup(text.toString())
+            }
+            positiveButton(R.string.dialog_btn_submit)
+            negativeButton(R.string.dialog_btn_cancel)
         }
     }
 
     private fun showGenerateConfirmationDialog() {
         MaterialDialog(requireContext()).show {
-            title(text = "Confirmation")
-            message(text = "After generate, this group will be locked and couldn't be edited anymore. Are you sure you want to generate recommendation for this group?")
-            positiveButton(text = "Yes") {
+            title(R.string.dialog_generate_confirmation_title)
+            message(R.string.dialog_generate_confirmation_message)
+            positiveButton(R.string.dialog_btn_yes) {
                 viewModel.onGenerateRecommendation()
             }
-            negativeButton(text = "No") { }
+            negativeButton(R.string.dialog_btn_no) { }
         }
     }
 }

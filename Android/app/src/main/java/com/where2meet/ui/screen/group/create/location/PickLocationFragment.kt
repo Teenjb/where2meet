@@ -59,7 +59,7 @@ class PickLocationFragment : BaseFragment(R.layout.fragment_pick_location) {
 
             centerMarker = mMap.addMarker(
                 MarkerOptions()
-                    .position(mMap.cameraPosition.target)
+                    .position(mMap.cameraPosition.target),
             )
         }
 
@@ -77,8 +77,8 @@ class PickLocationFragment : BaseFragment(R.layout.fragment_pick_location) {
                         navigateTo(
                             PickLocationFragmentDirections.actionPickLocationToDetail(
                                 args.groupId,
-                                args.isAdmin
-                            )
+                                args.isAdmin,
+                            ),
                         )
                     }
 
@@ -133,8 +133,8 @@ class PickLocationFragment : BaseFragment(R.layout.fragment_pick_location) {
                     mMap.moveCamera(
                         CameraUpdateFactory.newLatLngZoom(
                             LatLng(location.latitude, location.longitude),
-                            15f // city-wide zoom
-                        )
+                            15f, // city-wide zoom
+                        ),
                     )
                 } else {
                     toast(getString(R.string.err_location_not_found))
@@ -153,8 +153,8 @@ class PickLocationFragment : BaseFragment(R.layout.fragment_pick_location) {
                 requestLocationPermissionLauncher.launch(
                     arrayOf(
                         Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.ACCESS_COARSE_LOCATION
-                    )
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                    ),
                 )
             }
             negativeButton(android.R.string.cancel) {
@@ -178,7 +178,7 @@ class PickLocationFragment : BaseFragment(R.layout.fragment_pick_location) {
 
     private val requestLocationPermissionLauncher =
         registerForActivityResult(
-            ActivityResultContracts.RequestMultiplePermissions()
+            ActivityResultContracts.RequestMultiplePermissions(),
         ) { permissions ->
             when {
                 permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) -> {

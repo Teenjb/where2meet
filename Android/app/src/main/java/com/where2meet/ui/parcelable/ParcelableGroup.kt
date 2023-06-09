@@ -11,5 +11,5 @@ data class ParcelableGroup(
     val isAdmin: Boolean,
     val hasMood: Boolean,
     val hasLocation: Boolean,
-    val hasResult: Boolean
+    val hasResult: Boolean,
 ) : Parcelable

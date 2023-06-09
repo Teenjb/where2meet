@@ -24,15 +24,16 @@ android {
     }
 
     buildTypes {
-        getByName("release") {
+        release {
+            isDebuggable = true
             isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("debug")
         }
-        getByName("debug") {
-            // isMinifyEnabled = true
+        debug {
             proguardFiles(
                 getDefaultProguardFile("proguard-android.txt"),
                 "proguard-rules.pro"
@@ -95,6 +96,7 @@ dependencies {
     // settings
     implementation("androidx.preference:preference-ktx:1.2.0")
     implementation("com.afollestad.material-dialogs:core:3.3.0")
+    implementation("com.afollestad.material-dialogs:input:3.3.0")
 
     // networking
     implementation("com.squareup.retrofit2:retrofit:2.9.0")

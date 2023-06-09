@@ -29,7 +29,7 @@ subprojects {
 
     detekt {
         toolVersion = "1.23.0"
-        config.setFrom(file("config/detekt/detekt.yml"))
+        config.setFrom(files("${project.rootDir}/detekt.yml"))
         buildUponDefaultConfig = true
     }
 }

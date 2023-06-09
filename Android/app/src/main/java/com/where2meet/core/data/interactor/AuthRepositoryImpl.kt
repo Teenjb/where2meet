@@ -22,7 +22,7 @@ class AuthRepositoryImpl @Inject constructor(
         val response = apiRequest {
             api.login(body)
         }
-        val (token, user) = response.data ?: throw IllegalStateException("Data is empty")
+        val (token, user) = checkNotNull(response.data) { "Data is empty" }
         // create new session
         val newSession = Session(
             token,

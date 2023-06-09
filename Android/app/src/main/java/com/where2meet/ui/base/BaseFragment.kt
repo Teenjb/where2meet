@@ -7,6 +7,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavDirections
+import androidx.navigation.Navigator
 import androidx.navigation.fragment.findNavController
 import coil.ImageLoader
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,5 +45,9 @@ abstract class BaseFragment(@LayoutRes layoutId: Int) : Fragment(layoutId) {
 
     protected fun navigateTo(directions: NavDirections) {
         findNavController().navigate(directions)
+    }
+
+    protected fun navigateTo(directions: NavDirections, extras: Navigator.Extras) {
+        findNavController().navigate(directions, extras)
     }
 }

@@ -30,13 +30,13 @@ import javax.inject.Inject
 
 class GroupRepositoryImpl @Inject constructor(
     private val api: ApiService,
-    private val preference: DataStoreManager
+    private val preference: DataStoreManager,
 ) : GroupRepository, SafeApiRequest() {
     override suspend fun createGroup(): Flow<Result<Group>> =
         preference.token.flatMapLatest { token ->
             wrapFlowApiCall {
                 val response = apiRequest { api.createGroup(token) }
-                val group = response.data ?: throw IllegalStateException("Data is empty")
+                val group = checkNotNull(response.data) { "Data is empty" }
                 Result.success(group.toModel())
             }
         }
@@ -46,7 +46,7 @@ class GroupRepositoryImpl @Inject constructor(
             wrapFlowApiCall {
                 val body = UpdateGroupBody(form.name)
                 val response = apiRequest { api.updateGroup(token, form.groupId, body) }
-                val group = response.data ?: throw IllegalStateException("Data is empty")
+                val group = checkNotNull(response.data) { "Data is empty" }
                 Result.success(group.toModel())
             }
         }
@@ -72,7 +72,7 @@ class GroupRepositoryImpl @Inject constructor(
         preference.token.flatMapLatest { token ->
             wrapFlowApiCall {
                 val response = apiRequest { api.generateRecommendation(token, groupId) }
-                val group = response.data ?: throw IllegalStateException("Data is empty")
+                val group = checkNotNull(response.data) { "Data is empty" }
                 Result.success(group.toModel())
             }
         }
@@ -82,7 +82,7 @@ class GroupRepositoryImpl @Inject constructor(
             wrapFlowApiCall {
                 val body = JoinGroupBody(form.code)
                 val response = apiRequest { api.joinGroup(token, body) }
-                val group = response.data ?: throw IllegalStateException("Data is empty")
+                val group = checkNotNull(response.data) { "Data is empty" }
                 Result.success(group.toModel())
             }
         }
@@ -91,17 +91,17 @@ class GroupRepositoryImpl @Inject constructor(
         preference.token.flatMapLatest { token ->
             wrapFlowApiCall {
                 val response = apiRequest { api.fetchGroups(token, size = size) }
-                val pagingData = response.data ?: throw IllegalStateException("Data is empty")
+                val pagingData = checkNotNull(response.data) { "Data is empty" }
                 Result.success(pagingData.groups.map(MiniGroupJson::toModel))
             }
         }
 
-    override suspend fun fetchPagedGroups(): Flow<PagingData<MiniGroup>> =
+    override suspend fun fetchPagedGroups(query: String): Flow<PagingData<MiniGroup>> =
         preference.token.flatMapLatest { token ->
             Pager(
-                PagingConfig(pageSize = 10, initialLoadSize = 30, enablePlaceholders = true)
+                PagingConfig(pageSize = 10, initialLoadSize = 30, enablePlaceholders = true),
             ) {
-                GroupPagingSource(api, token)
+                GroupPagingSource(api, token, query)
             }.flow
         }
 
@@ -109,7 +109,7 @@ class GroupRepositoryImpl @Inject constructor(
         preference.token.flatMapLatest { token ->
             wrapFlowApiCall {
                 val response = apiRequest { api.fetchGroupById(token, groupId) }
-                val group = response.data ?: throw IllegalStateException("Data is empty")
+                val group = checkNotNull(response.data) { "Data is empty" }
                 Result.success(group.toModel())
             }
         }
@@ -137,7 +137,7 @@ class GroupRepositoryImpl @Inject constructor(
         preference.token.flatMapLatest { token ->
             wrapFlowApiCall {
                 val response = apiRequest { api.fetchMoods(token) }
-                val data = response.data ?: throw IllegalStateException("Data is empty")
+                val data = checkNotNull(response.data) { "Data is empty" }
                 Result.success(data.map(MoodJson::toModel))
             }
         }

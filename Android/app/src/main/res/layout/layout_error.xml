@@ -1,53 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     android:orientation="vertical"
     android:padding="16dp">
 
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
+
+    <TextView
+        android:id="@+id/tv_emoji"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        app:cardBackgroundColor="?colorErrorContainer"
-        app:cardCornerRadius="12dp">
+        android:textSize="96sp"
+        tools:text="⚠️" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="16dp">
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textAlignment="center"
+        android:textAppearance="?textAppearanceHeadlineSmall"
+        android:textColor="?colorOnErrorContainer"
+        tools:text="No results found" />
 
-            <ImageView
-                android:id="@+id/iv_icon"
-                android:layout_width="96dp"
-                android:layout_height="96dp"
-                android:src="@drawable/ic_error"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="?colorError" />
+    <TextView
+        android:id="@+id/tv_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textAppearance="?textAppearanceTitleSmall"
+        android:textColor="?colorOnErrorContainer"
+        app:layout_constraintTop_toBottomOf="@id/tv_title"
+        tools:text="We didn't find anything from your search query" />
 
-            <TextView
-                android:id="@+id/tv_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:textAppearance="?textAppearanceHeadlineSmall"
-                android:textColor="?colorOnErrorContainer"
-                app:layout_constraintTop_toBottomOf="@id/iv_icon"
-                tools:text="No results found" />
-
-            <TextView
-                android:id="@+id/tv_message"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:textAppearance="?textAppearanceTitleSmall"
-                android:textColor="?colorOnErrorContainer"
-                app:layout_constraintTop_toBottomOf="@id/tv_title"
-                tools:text="We didn't find anything from your search query" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.google.android.material.card.MaterialCardView>
-</FrameLayout>
+</LinearLayout>

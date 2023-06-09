@@ -16,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class PickLocationViewModel @Inject constructor(
     private val group: GroupRepository,
-    handle: SavedStateHandle
+    handle: SavedStateHandle,
 ) : BaseViewModel() {
     private val groupId = handle.get<Int>("groupId") ?: -1
     fun submitLocation(location: LatLng) {
@@ -28,8 +28,9 @@ class PickLocationViewModel @Inject constructor(
                 .collect { result ->
                     if (result.isSuccess) {
                         CreateGroupEvent.LocationSubmitted.send()
-                    } else if (result.isFailure)
+                    } else if (result.isFailure) {
                         Event.Error(result.exceptionOrNull()).send()
+                    }
                 }
         }
     }

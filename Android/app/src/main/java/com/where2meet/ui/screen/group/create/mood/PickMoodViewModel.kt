@@ -22,7 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class PickMoodViewModel @Inject constructor(
     private val group: GroupRepository,
-    handle: SavedStateHandle
+    handle: SavedStateHandle,
 ) : BaseViewModel() {
     private val groupId = handle.get<Int>("groupId") ?: -1
 
@@ -47,8 +47,9 @@ class PickMoodViewModel @Inject constructor(
                     if (result.isSuccess) {
                         mMoods.emit(result.getOrThrow().map(Mood::toChipData))
                         Event.NotLoading.send()
-                    } else if (result.isFailure)
+                    } else if (result.isFailure) {
                         Event.Error(result.exceptionOrNull()).send()
+                    }
                 }
         }
     }
@@ -68,8 +69,9 @@ class PickMoodViewModel @Inject constructor(
                 .collect { result ->
                     if (result.isSuccess) {
                         CreateGroupEvent.MoodsSubmitted.send()
-                    } else if (result.isFailure)
+                    } else if (result.isFailure) {
                         Event.Error(result.exceptionOrNull()).send()
+                    }
                 }
         }
     }

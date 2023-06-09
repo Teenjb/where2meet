@@ -1,6 +1,9 @@
 package com.where2meet.ui.screen.result
 
+import android.content.Intent
+import android.net.Uri
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -64,10 +67,12 @@ class GroupResultFragment : BaseFragment(R.layout.fragment_result) {
     }
 
     private fun resultObserver() = lifecycleScope.launch {
-        viewModel.result.collectLatest {
-            if (it == null) return@collectLatest
-            showResult(it)
-        }
+        viewModel.result
+            .flowWithLifecycle(lifecycle)
+            .collectLatest {
+                if (it == null) return@collectLatest
+                showResult(it)
+            }
     }
 
     private fun showResult(data: Group) {
@@ -75,7 +80,7 @@ class GroupResultFragment : BaseFragment(R.layout.fragment_result) {
             tvName.text = data.name
             tvGeneratedAt.text = getString(
                 R.string.lbl_group_generated_at,
-                formatIsoDateString(data.createdAt, "MMMM dd, yyyy")
+                formatIsoDateString(data.createdAt, "MMMM dd, yyyy"),
             )
 
             setupRecyclerView(rvResult)
@@ -88,12 +93,18 @@ class GroupResultFragment : BaseFragment(R.layout.fragment_result) {
     }
 
     private fun setupRecyclerView(view: RecyclerView) {
-        resultAdapter = ResultAdapter(
-            imageLoader
-        ) { result ->
-            logcat { "result -> $result" }
+        resultAdapter = ResultAdapter { result ->
+            val geoUri = generateGeoUri(
+                result.location.name,
+                result.location.lat,
+                result.location.lng,
+            )
+            Intent(Intent.ACTION_VIEW, Uri.parse(geoUri)).also { startActivity(it) }
         }
         view.adapter = resultAdapter
         view.layoutManager = LinearLayoutManager(requireContext())
     }
+
+    private fun generateGeoUri(title: String, lat: Double, lng: Double) =
+        "http://maps.google.com/maps?q=loc:$lat,$lng ($title)"
 }

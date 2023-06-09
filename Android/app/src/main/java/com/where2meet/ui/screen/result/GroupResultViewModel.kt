@@ -37,8 +37,9 @@ class GroupResultViewModel @Inject constructor(
                     if (result.isSuccess) {
                         mResult.emit(result.getOrThrow())
                         Event.NotLoading.send()
-                    } else if (result.isFailure)
+                    } else if (result.isFailure) {
                         Event.Error(result.exceptionOrNull()).send()
+                    }
                 }
         }
     }

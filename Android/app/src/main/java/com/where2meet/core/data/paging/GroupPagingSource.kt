@@ -12,6 +12,7 @@ import java.io.IOException
 class GroupPagingSource(
     private val api: ApiService,
     private val token: String,
+    private val query: String,
 ) : PagingSource<Int, MiniGroup>() {
     override fun getRefreshKey(state: PagingState<Int, MiniGroup>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
@@ -23,7 +24,7 @@ class GroupPagingSource(
         try {
             val nextPage = params.key ?: 1
             val response =
-                api.fetchGroups(token = token, page = nextPage, size = params.loadSize)
+                api.fetchGroups(token = token, page = nextPage, size = params.loadSize, q = query)
             val pagedResponse = response.body()
 
             val data: List<MiniGroup>? = pagedResponse?.data?.groups?.map(MiniGroupJson::toModel)
@@ -31,7 +32,7 @@ class GroupPagingSource(
             return LoadResult.Page(
                 data = data.orEmpty(),
                 prevKey = if (nextPage == 1) null else nextPage - 1,
-                nextKey = if (data.isNullOrEmpty()) null else nextPage + 1
+                nextKey = if (data.isNullOrEmpty()) null else nextPage + 1,
             )
         } catch (ex: HttpException) {
             throw IOException(ex)

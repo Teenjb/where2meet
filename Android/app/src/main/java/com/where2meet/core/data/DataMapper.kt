@@ -27,12 +27,12 @@ fun GroupJson.toModel() = Group(
     createdAt = this.createdAt,
     updatedAt = this.updatedAt,
     generatedAt = this.generatedAt,
-    users = this.users.map(UserGroupJson::toModel)
+    users = this.users.map(UserGroupJson::toModel),
 )
 
 fun ResultJson.toModel() = GroupResult(
     rank = this.rank,
-    location = this.locations.toModel()
+    location = this.locations.toModel(),
 )
 
 fun LocationJson.toModel() = Location(
@@ -54,14 +54,14 @@ fun UserGroupJson.toModel(): UserGroup {
 fun UserJson.toModel() =
     User(
         id = this.id,
-        username = this.username
+        username = this.username,
     )
 
 fun MoodJson.toModel() =
     Mood(
         id = this.id,
         name = this.name,
-        display = this.displayText
+        display = this.displayText,
     )
 
 fun MiniGroupJson.toModel() =
@@ -69,7 +69,7 @@ fun MiniGroupJson.toModel() =
         id = this.id,
         name = this.name,
         status = this.status,
-        members = this.users.map { it.username }
+        members = this.users.map { it.username },
     )
 
 // domain -> ui
@@ -84,7 +84,6 @@ fun Group.toParcelable(currentUserId: Int): ParcelableGroup {
         isAdmin = this.adminId == currentUserId,
         hasLocation = (userData?.lat != null && userData.lng != null),
         hasMood = !userData?.moods.isNullOrEmpty(),
-        hasResult = !this.result.isNullOrEmpty()
+        hasResult = !this.result.isNullOrEmpty(),
     )
 }
-

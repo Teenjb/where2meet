@@ -9,5 +9,5 @@ data class MiniGroupJson(
     val id: Int,
     val name: String,
     val status: String,
-    @SerialName("Users") val users : List<UserJson>,
+    @SerialName("Users") val users: List<UserJson>,
 )

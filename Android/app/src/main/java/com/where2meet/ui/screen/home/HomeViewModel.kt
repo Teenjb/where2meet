@@ -21,6 +21,10 @@ class HomeViewModel @Inject constructor(
     private val auth: AuthRepository,
     private val group: GroupRepository,
 ) : BaseViewModel() {
+    companion object {
+        const val HOME_LIST_SIZE = 5
+    }
+
     val session = auth.session()
 
     private val mShowedInvitation = MutableStateFlow(false)
@@ -37,14 +41,15 @@ class HomeViewModel @Inject constructor(
         apiJob?.cancel()
         apiJob = viewModelScope.launch {
             Event.Loading.send()
-            group.fetchGroups(5)
+            group.fetchGroups(HOME_LIST_SIZE)
                 .catch { Event.Error(it).send() }
                 .collect { result ->
                     if (result.isSuccess) {
                         mGroups.emit(result.getOrThrow())
                         Event.NotLoading.send()
-                    } else if (result.isFailure)
+                    } else if (result.isFailure) {
                         Event.Error(result.exceptionOrNull()).send()
+                    }
                 }
         }
     }
@@ -64,8 +69,9 @@ class HomeViewModel @Inject constructor(
                 .collect { result ->
                     if (result.isSuccess) {
                         HomeEvent.GroupCreated(result.getOrThrow().id).send()
-                    } else if (result.isFailure)
+                    } else if (result.isFailure) {
                         Event.Error(result.exceptionOrNull()).send()
+                    }
                 }
         }
     }
@@ -80,8 +86,9 @@ class HomeViewModel @Inject constructor(
                 .collect { result ->
                     if (result.isSuccess) {
                         HomeEvent.GroupJoined(result.getOrThrow().id).send()
-                    } else if (result.isFailure)
+                    } else if (result.isFailure) {
                         Event.Error(result.exceptionOrNull()).send()
+                    }
                 }
         }
     }
@@ -102,10 +109,11 @@ class HomeViewModel @Inject constructor(
                 .collect { result ->
                     if (result.isSuccess) {
                         HomeEvent.NavigateToDetail(
-                            result.getOrThrow().toParcelable(session.userId)
+                            result.getOrThrow().toParcelable(session.userId),
                         ).send()
-                    } else if (result.isFailure)
+                    } else if (result.isFailure) {
                         Event.Error(result.exceptionOrNull()).send()
+                    }
                 }
         }
     }

@@ -11,16 +11,19 @@
         android:id="@+id/hero"
         android:layout_width="match_parent"
         android:layout_height="304dp"
+        android:transitionName="hero"
         app:cardBackgroundColor="?colorSecondary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
+            android:id="@+id/iv_logo"
             android:layout_width="216dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:contentDescription="@string/cd_logo"
-            android:src="@drawable/logo" />
+            android:src="@drawable/logo"
+            android:transitionName="logo" />
     </com.google.android.material.card.MaterialCardView>
 
     <LinearLayout

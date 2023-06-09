@@ -27,7 +27,7 @@ import javax.inject.Singleton
 class DataModule {
     companion object {
         const val DEFAULT_TIMEOUT = 5L
-        var BASE_URL = "https://where2meet-backend-wtlln4sbra-et.a.run.app/w2m/"
+        var baseUrl = "https://where2meet-backend-wtlln4sbra-et.a.run.app/w2m/"
     }
 
     private val json = Json {
@@ -78,7 +78,7 @@ class DataModule {
     @Provides
     fun provideApiService(client: OkHttpClient, factory: Converter.Factory): ApiService {
         val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(baseUrl)
             .client(client)
             .addConverterFactory(factory)
             .build()

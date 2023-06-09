@@ -1,8 +1,8 @@
 package com.where2meet.core.domain.repository
 
+import com.where2meet.core.domain.model.Session
 import com.where2meet.core.domain.model.form.AuthLogin
 import com.where2meet.core.domain.model.form.AuthRegister
-import com.where2meet.core.domain.model.Session
 import kotlinx.coroutines.flow.Flow
 
 interface AuthRepository {
