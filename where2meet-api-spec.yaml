@@ -1,0 +1,633 @@
+openapi: '3.0.0'
+info:
+  version: '1.0.0'
+  title: 'where2meet'
+  description: where2meet
+servers:
+  - url: "https://where2meet-backend-wtlln4sbra-et.a.run.app/w2m"
+    description: Production
+
+paths:
+  /login:
+    post:
+      summary: Login ✅
+      tags:
+        - Auth
+      security: []
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              properties:
+                username:
+                  type: string
+                  example: w2mdev1
+                password:
+                  type: string
+                  example: Dev1password
+      responses:
+        200:
+          description: Login Successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Login Successful
+                  data:
+                    type: object
+                    properties:
+                      token:
+                        type: string
+                        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjg1MzUxMzA3fQ.CGwLOab58FOLz1nuDqCV4cHZCdzbfe13LlhFGPisGtM
+                      user:
+                        $ref: '#/components/schemas/user'
+        400:
+          description: Login failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                Wrong username:
+                  value:
+                    message: User does not exist
+                Wrong password:
+                  value:
+                    message: Invalid password
+  /register:
+    post:
+      summary: Register ✅
+      security: []
+      tags:
+        - Auth
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                email:
+                  type: string
+              example:
+                username: w2mdev1
+                password: Dev1password
+                email: w2mdev1@gmail.com
+      responses:
+        201:
+          description: User created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                example:
+                  message: User created
+  /me:
+    get:
+      summary: Get details of self (like login response) ✅
+      tags:
+        - Auth
+      responses:
+        200:
+          description: User data fetched
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User data fetched
+                  data:
+                    $ref: '#/components/schemas/user'
+  /groups:
+    post:
+      summary: Create Group ✅
+      description: Create a group and add the user as admin
+      tags:
+        - Group Administration
+      responses:
+        201:
+          description: Group created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Group created
+                  data:
+                    $ref: '#/components/schemas/group'
+    get:
+      summary: Get Groups joined by a user ✅
+      description: |
+        Get Groups joined by a user \
+        sorted by userGroup.createdAt (aka when the user joins a group) descending \
+        \
+        groups list may be empty (user hasn't joined any groups yet) but will return 400 status code if search query is entered \
+        \
+        formula for pageCount is `ceil([total results count] / pageSize)` \
+        (don't forget that `int/int` might result in int and so the result might automatically be floored)
+      tags:
+        - Group Activity As Member
+      parameters:
+        - name: pageSize
+          schema:
+            type: integer
+          in: query
+          required: true
+        - name: pageNumber
+          schema:
+              type: integer
+          in: query
+          required: true
+        - name: search
+          schema:
+            type: string
+          in: query
+          required: false
+      responses:
+        200:
+          description: Groups found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Groups found
+                  data:
+                    type: object
+                    properties:
+                      totalPage:
+                        type: integer
+                        example: 1
+                      pageNumbert:
+                        type: integer
+                        example: 1
+                      pageSize:
+                        type: integer
+                        example: 1
+                      groups:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/groupSmall'
+        400:
+          description: Search query entered and groups not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Groups not found
+
+  /groups/{groupId}:
+    parameters:
+    - name: groupId
+      schema:
+        $ref: '#/components/schemas/GroupId'
+      in: path
+      required: true
+    get:
+      summary: Get Group By Group Id ✅
+      tags:
+        - Group Activity As Member
+      responses:
+        200:
+          description: Group found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Group found
+                  data:
+                    $ref: '#/components/schemas/group'
+        400:
+          description: Group not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                User is not a member of the group:
+                  value:
+                    message: User is not a member of the group
+                Group doesn't exist:
+                  value:
+                    message: Group doesn't exist
+    put:
+      summary: Update Group ✅
+      tags:
+        - Group Administration
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              properties:
+                name:
+                  type: string
+                  example: nax mobil
+      responses:
+        200:
+          description: Group updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Group updated
+                  data:
+                    $ref: '#/components/schemas/group'
+    delete:
+      summary: Delete Group ✅
+      tags:
+        - Group Administration
+      responses:
+        200:
+          description: Group deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Group deleted
+  /groups/join:
+    post:
+      summary: Join Group ✅
+      tags:
+        - Group Activity As Member
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              properties:
+                code:
+                  $ref: '#/components/schemas/GroupCode'
+      responses:
+        200:
+          description: Group joined
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Group joined
+                  data:
+                    $ref: '#/components/schemas/group'
+        400:
+          description: Group not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Group not found
+  /groups/{groupId}/members/{userId}:
+    parameters:
+    - name: groupId
+      schema:
+        $ref: '#/components/schemas/GroupId'
+      in: path
+      required: true
+    - name: userId
+      schema:
+        $ref: '#/components/schemas/UserId'
+      in: path
+      required: true
+    delete:
+      summary: Delete Member ✅
+      tags:
+        - Group Administration
+      responses:
+        200:
+          description: Member deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Member deleted
+
+  /groups/{groupId}/recommend:
+    post:
+      summary: Generate Recommendation for a Group ✅
+      tags:
+        - Group Administration
+      parameters:
+        - name: groupId
+          schema:
+            $ref: '#/components/schemas/GroupId'
+          in: path
+          required: true
+      responses:
+        200:
+          description: Group recommendation generated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Group recommendation generated
+                  data:
+                    $ref: '#/components/schemas/group'
+  /moods:
+    get:
+      summary: Get list of moods ✅
+      responses:
+        200:
+          description: Moods found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Moods found
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/mood'
+  /groups/{groupId}/location:
+    put:
+      summary: Set location of a user on a group ✅
+      tags:
+        - Group Activity As Member
+      parameters:
+        - name: groupId
+          schema:
+            $ref: '#/components/schemas/GroupId'
+          in: path
+          required: true
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              properties:
+                lang:
+                  type: number
+                lat:
+                  type: number
+      responses:
+        200:
+          description: User location set
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User location set
+        400:
+          description: Group not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Group not found
+  /groups/{groupId}/mood:
+    put:
+      summary: Set mood of a user on a group ✅
+      tags:
+        - Group Activity As Member
+      parameters:
+        - name: groupId
+          schema:
+            $ref: '#/components/schemas/GroupId'
+          in: path
+          required: true
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              properties:
+                moods:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/MoodId' # ini ntar dicek apakah bener bisa keterima berbentuk array
+      responses:
+        200:
+          description: User location set
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User location set
+        400:
+          description: Group not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Group not found
+components:
+  schemas:
+    UserId:
+      description: A unique identifier of a user
+      type: integer
+      example: 1
+    GroupId:
+      description: A unique identifier of a group
+      type: integer
+      example: 1
+    GroupCode:
+      description: A unique identifier of a group in code form
+      type: string
+      example: c9eeWk
+    MoodId:
+      description: A unique identifier of a mood
+      type: integer
+      example: 1
+    LocationId:
+      description: A unique identifier of a location
+      type: integer
+      example: 1
+    user:
+      description: A user object
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/UserId'
+        username:
+          type: string
+          example: w2mdev1
+        email:
+          type: string
+          example: w2mdev1@gmail.com
+    userSmall:
+      description: A user object
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/UserId'
+        username:
+          type: string
+          example: w2mdev1
+    mood:
+      description: A mood object
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/MoodId'
+        name:
+          type: string
+          example: happy
+        displayText:
+          type: string
+          example: 😄 Happy
+    location:
+      description: A location object (hangout place)
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/LocationId'
+        name:
+          type: string
+          example: Siomay Enak Non-Halal
+        imageLink:
+          type: string
+          example: https://example-website.com/example-image.jpg
+        lang:
+          type: number
+          example: -5.234567
+        lat:
+          type: number
+          example: 1.234567
+    group:
+      description: A group object
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/GroupId'
+        status:
+          type: string
+          enum:
+            - Pending
+            - Done
+        name:
+          type: string
+          example: nax mobil
+        adminId:
+          $ref: '#/components/schemas/UserId'
+        result:
+          description: When fetched, this is always sorted by rank ascending
+          nullable: true
+          type: array
+          items:
+            $ref: '#/components/schemas/resultLocation'
+        code:
+          $ref: '#/components/schemas/GroupCode'
+        createdAt:
+          type: string
+          example: 2023-05-31T15:00:38.171Z
+        updatedAt:
+          type: string
+          example: 2023-05-31T15:00:38.171Z
+        generatedAt:
+          nullable: true
+          type: string
+          example: 2023-05-31T15:00:38.171Z
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/userGroup'
+    groupSmall:
+      description: A concise group object
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/GroupId'
+        name:
+          type: string
+          example: nax mobil
+        status:
+          type: string
+          enum:
+            - Pending
+            - Done
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/userSmall'
+    resultLocation:
+      description: |
+        A location object and its rank on a group recommendation generator \
+        always fetched as part of a group object \
+        On backend, this is implemented as a many-to-many relationship between group and location
+      type: object
+      properties:
+        rank:
+          type: integer
+          example: 1
+        location:
+          $ref: '#/components/schemas/location'
+    userGroup:
+      description: | 
+        A user object with additional information relating to a group \
+        always fetched as part of a group object \
+        on backend, this is implemented as a many-to-many relationship between group and user
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/userSmall'
+        moods:
+          type: array
+          items:
+            $ref: '#/components/schemas/mood'
+        lang:
+          type: number
+          example: -5.234567
+        lat:
+          type: number
+          example: 1.234567
+  securitySchemes:
+    bearerAuth: 
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []
