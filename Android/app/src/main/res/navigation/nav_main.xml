@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_main">
+    <fragment
+        android:id="@+id/onboarding"
+        android:name="com.where2meet.ui.screen.onboarding.OnBoardingFragment"
+        android:label="Onboarding"
+        tools:layout="@layout/fragment_on_boarding">
+        <action
+            android:id="@+id/action_onboarding_to_login"
+            app:destination="@id/login" />
+        <action
+            android:id="@+id/action_onboarding_to_register"
+            app:destination="@id/register" />
+    </fragment>
+    <fragment
+        android:id="@+id/login"
+        android:name="com.where2meet.ui.screen.auth.login.LoginFragment"
+        android:label="Login"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_login_to_register"
+            app:destination="@id/register" />
+        <action
+            android:id="@+id/action_login_to_home"
+            app:destination="@id/home"
+            app:popUpTo="@id/nav_main"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/register"
+        android:name="com.where2meet.ui.screen.auth.register.RegisterFragment"
+        android:label="Register"
+        tools:layout="@layout/fragment_register">
+        <action
+            android:id="@+id/action_register_to_login"
+            app:destination="@id/login"
+            app:popUpTo="@id/onboarding" />
+    </fragment>
+    <fragment
+        android:id="@+id/home"
+        android:name="com.where2meet.ui.screen.home.HomeFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_home_to_onboarding"
+            app:destination="@id/onboarding"
+            app:popUpTo="@id/nav_main"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_home_to_detail"
+            app:destination="@id/detailGroup" />
+        <action
+            android:id="@+id/action_home_to_group_result"
+            app:destination="@id/groupResult" />
+        <action
+            android:id="@+id/action_home_to_list_group"
+            app:destination="@id/listGroup" />
+        <action
+            android:id="@+id/action_home_to_pick_mood"
+            app:destination="@id/pickMood" />
+        <action
+            android:id="@+id/action_home_to_pick_location"
+            app:destination="@id/pickLocation" />
+        <argument
+            android:name="invitationCode"
+            android:defaultValue=''
+            app:argType="string" />
+        <deepLink
+            android:autoVerify="true"
+            app:uri="https://where2meet-backend-wtlln4sbra-et.a.run.app/w2m/invitations/{invitationCode}" />
+    </fragment>
+    <fragment
+        android:id="@+id/listGroup"
+        android:name="com.where2meet.ui.screen.group.list.ListGroupFragment"
+        android:label="ListGroupFragment"
+        tools:layout="@layout/fragment_list_group">
+        <action
+            android:id="@+id/action_list_group_to_detail"
+            app:destination="@id/detailGroup" />
+        <action
+            android:id="@+id/action_list_group_to_group_result"
+            app:destination="@id/groupResult" />
+        <action
+            android:id="@+id/action_list_group_to_pick_mood"
+            app:destination="@id/pickMood" />
+        <action
+            android:id="@+id/action_list_group_to_pick_location"
+            app:destination="@id/pickLocation" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailGroup"
+        android:name="com.where2meet.ui.screen.group.detail.DetailGroupFragment"
+        android:label="DetailGroupFragment"
+        tools:layout="@layout/fragment_detail_group">
+        <action
+            android:id="@+id/action_detail_to_invite_member"
+            app:destination="@id/inviteMember" />
+        <action
+            android:id="@+id/action_detail_to_pick_mood"
+            app:destination="@id/pickMood" />
+        <action
+            android:id="@+id/action_detail_to_group_result"
+            app:destination="@id/groupResult"
+            app:popUpTo="@id/detailGroup"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="groupId"
+            app:argType="integer" />
+        <argument
+            android:name="isAdmin"
+            app:argType="boolean" />
+    </fragment>
+    <fragment
+        android:id="@+id/inviteMember"
+        android:name="com.where2meet.ui.screen.group.invite.InviteMemberFragment"
+        android:label="InviteMemberFragment"
+        tools:layout="@layout/fragment_invite_member">
+        <argument
+            android:name="groupCode"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/pickLocation"
+        android:name="com.where2meet.ui.screen.group.create.location.PickLocationFragment"
+        android:label="PickLocationFragment"
+        tools:layout="@layout/fragment_pick_location">
+        <action
+            android:id="@+id/action_pick_location_to_detail"
+            app:destination="@id/detailGroup"
+            app:popUpTo="@id/pickMood"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="groupId"
+            app:argType="integer" />
+        <argument
+            android:name="isAdmin"
+            app:argType="boolean" />
+    </fragment>
+    <fragment
+        android:id="@+id/pickMood"
+        android:name="com.where2meet.ui.screen.group.create.mood.PickMoodFragment"
+        android:label="PickMoodFragment"
+        tools:layout="@layout/fragment_pick_mood">
+        <action
+            android:id="@+id/action_pick_mood_to_pick_location"
+            app:destination="@id/pickLocation" />
+        <argument
+            android:name="groupId"
+            app:argType="integer" />
+        <argument
+            android:name="isAdmin"
+            app:argType="boolean" />
+    </fragment>
+    <fragment
+        android:id="@+id/groupResult"
+        android:name="com.where2meet.ui.screen.result.GroupResultFragment"
+        android:label="ResultFragment"
+        tools:layout="@layout/fragment_result">
+        <argument
+            android:name="groupId"
+            app:argType="integer" />
+    </fragment>
+</navigation>
