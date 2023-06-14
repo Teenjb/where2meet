@@ -106,7 +106,7 @@ async function getRecommendation(req, res) {
       mappedRepsonse.push({
         rank: counter++,
         locations: {
-          id: element.id,
+          id: 1,
           name: element.Nama,
           imageLink: null,
           long: element.Lang,

@@ -40,14 +40,6 @@ async function getGroupByCode(req, res) {
   }
 }
 
-async function searchGroup(req, res) {
-  try {
-    await group.searchGroup(req, res);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-}
-
 async function filterGroup(req, res) {
   try {
     await group.filterGroup(req, res);
@@ -94,7 +86,6 @@ module.exports = {
   getGroupByUserId,
   getGroupByGroupId,
   getGroupByCode,
-  searchGroup,
   filterGroup,
   updateGroup,
   deleteMember,

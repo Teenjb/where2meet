@@ -7,7 +7,6 @@ const {
   getGroupByUserId,
   getGroupByGroupId,
   getGroupByCode,
-  searchGroup,
   filterGroup,
   updateGroup,
   deleteMember,
@@ -35,7 +34,6 @@ router.post("/groups/join", verifyToken, joinGroup);
 router.get("/groups", verifyToken, getGroupByUserId);
 router.get("/groups/:groupId", verifyToken, getGroupByGroupId);
 router.get("/getGroupByCode", verifyToken, getGroupByCode);
-router.get("/searchGroup", verifyToken, searchGroup);
 router.get("/filterGroup", verifyToken, filterGroup);
 
 router.put("/groups/:groupId", verifyToken, updateGroup);

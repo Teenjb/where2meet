@@ -145,7 +145,7 @@ async function joinGroup(req, res) {
 }
 
 async function getGroupByUserId(req, res) {
-  const { pageSize, pageNumber } = req.query;
+  const { pageSize, pageNumber, search } = req.query;
   try {
     const userId = req.user;
     const user = await User.findOne({
@@ -164,7 +164,13 @@ async function getGroupByUserId(req, res) {
           through: { attributes: [] },
         },
       ],
-      attributes: ["id", "name", "status"],
+      order: [["createdAt", "DESC"]],
+      attributes: ["id", "name", "status", "createdAt"],
+      where: {
+        name: {
+          [Op.iLike]: `%${search}%`,
+        },
+      },
       limit: pageSize,
       offset: (pageNumber - 1) * pageSize,
     });
