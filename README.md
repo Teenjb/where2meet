@@ -18,4 +18,4 @@ Bangkit Capstone Project Team C23-PR545
 ## Documentation for Separate Parts of the Project
 - [Android](https://github.com/Teenjb/where2meet/blob/main/Android/README.md)
 - [Backend](https://github.com/Teenjb/where2meet/blob/main/Backend/README.md)
-- [Machine Learning](https://github.com/Teenjb/where2meet/blob/main/MachineLearning/README.md)
+- [Machine Learning](https://github.com/Teenjb/where2meet/blob/machinelearning/MachineLearning/README.md) (The complete ML repo is over on `machinelearning` branch)
