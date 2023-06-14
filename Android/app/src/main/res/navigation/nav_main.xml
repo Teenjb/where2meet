@@ -47,7 +47,7 @@
         <action
             android:id="@+id/action_home_to_onboarding"
             app:destination="@id/onboarding"
-            app:popUpTo="@id/nav_main"
+            app:popUpTo="@id/home"
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_home_to_detail"
