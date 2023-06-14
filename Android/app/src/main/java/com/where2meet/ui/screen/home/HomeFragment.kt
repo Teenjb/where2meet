@@ -170,7 +170,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                 tvGreeting.text = getString(R.string.lbl_greeting, session.username)
                 ivAvatar.apply {
                     val imgData = ImageRequest.Builder(this.context)
-                        .data("https://ui-avatars.com/api/?name=${session.username}&length=1")
+                        .data("https://ui-avatars.com/api/?name=${session.username}&length=1&format=png")
                         .target(this)
                         .allowHardware(true)
                         .build()
