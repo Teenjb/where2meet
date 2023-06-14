@@ -43,7 +43,7 @@ class UserGroupAdapter(
                 )
                 ivAvatar.apply {
                     val imgData = ImageRequest.Builder(this.context)
-                        .data("https://ui-avatars.com/api/?name=${data.user.username}&length=1")
+                        .data("https://ui-avatars.com/api/?name=${data.user.username}&length=1&format=png")
                         .target(this).transformations(RoundedCornersTransformation(16f))
                         .allowHardware(true).build()
                     imageLoader.enqueue(imgData)
