@@ -4,6 +4,15 @@
 
 # where2meet
 Bangkit Capstone Project Team C23-PR545
+## Introduction
+
+Welcome to the Meeting Point Finder project! This app is designed to help groups of people find the best central location for meetings or hangouts. By leveraging machine learning, our app identifies an optimal meeting point that is convenient for all participants.
+
+## Key Features
+
+- **Optimal Location Finding**: Machine learning algorithms are used to determine the best central location for a group.
+- **User-Friendly Interface**: Simple and intuitive interface to input locations and view results.
+- **Customizable Preferences**: Allows users to set preferences and constraints for location selection.
 
 ## Team Members
 | Student ID | Name | Learning Path |
